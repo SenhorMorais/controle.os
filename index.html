@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de O.S</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #312e81 50%, #0f172a 100%);
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #c7d2fe;
+            font-size: 1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card.green {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .stat-card.purple {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+
+        .stat-card p {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .card h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: bold;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: #c7d2fe;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #c7d2fe;
+            opacity: 0.7;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #818cf8;
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.3);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .orders-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            transition: all 0.3s;
+        }
+
+        .order-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .order-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .order-number {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-aberta {
+            background: rgba(156, 163, 175, 0.3);
+            color: #e5e7eb;
+            border: 1px solid rgba(156, 163, 175, 0.5);
+        }
+
+        .status-andamento {
+            background: rgba(59, 130, 246, 0.3);
+            color: #bfdbfe;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .status-pausada {
+            background: rgba(251, 191, 36, 0.3);
+            color: #fef3c7;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+        }
+
+        .status-concluida {
+            background: rgba(16, 185, 129, 0.3);
+            color: #d1fae5;
+            border: 1px solid rgba(16, 185, 129, 0.5);
+        }
+
+        .status-cancelada {
+            background: rgba(239, 68, 68, 0.3);
+            color: #fecaca;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .order-description {
+            color: #c7d2fe;
+            margin-bottom: 0.75rem;
+        }
+
+        .order-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: #c7d2fe;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.25rem;
+        }
+
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.3);
+            color: #bfdbfe;
+            border: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-edit:hover {
+            background: rgba(59, 130, 246, 0.5);
+        }
+
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.3);
+            color: #fecaca;
+            border: 1px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.5);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: #c7d2fe;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            font-size: 0.875rem;
+            opacity: 0.75;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Gestão de O.S</h1>
+            <p>Controle rápido e eficiente</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <p>Total de O.S</p>
+                <h2 id="totalOS">0</h2>
+            </div>
+            <div class="stat-card green">
+                <p>Concluídas</p>
+                <h2 id="totalConcluidas">0</h2>
+            </div>
+            <div class="stat-card purple">
+                <p>Hoje</p>
+                <h2 id="totalHoje">0</h2>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 id="formTitle">➕ Nova O.S</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Nº da O.S *</label>
+                    <input type="text" id="numeroOS" placeholder="Ex: OS-2024-001">
+                </div>
+                <div class="form-group">
+                    <label>Data *</label>
+                    <input type="date" id="data">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Descrição *</label>
+                <textarea id="descricao" placeholder="Descreva o serviço..."></textarea>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Hora Início</label>
+                    <input type="time" id="horaInicio">
+                </div>
+                <div class="form-group">
+                    <label>Hora Fim</label>
+                    <input type="time" id="horaFim">
+                </div>
+                <div class="form-group">
+                    <label>Status *</label>
+                    <select id="status">
+                        <option value="Aberta">Aberta</option>
+                        <option value="Em Andamento">Em Andamento</option>
+                        <option value="Pausada">Pausada</option>
+                        <option value="Concluída">Concluída</option>
+                        <option value="Cancelada">Cancelada</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="saveOrder()">
+                    💾 <span id="btnText">Salvar</span>
+                </button>
+                <button class="btn btn-secondary" id="btnCancel" onclick="cancelEdit()" style="display: none;">
+                    ✖️ Cancelar
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Ordens Cadastradas (<span id="orderCount">0</span>)</h2>
+            <div class="orders-list" id="ordersList"></div>
+        </div>
+    </div>
+
+    <script>
+        let orders = [];
+        let editingId = null;
+
+        // Carregar dados do localStorage
+        function loadOrders() {
+            const saved = localStorage.getItem('ordens-servico');
+            if (saved) {
+                orders = JSON.parse(saved);
+                renderOrders();
+                updateStats();
+            }
+        }
+
+        // Salvar dados no localStorage
+        function saveToStorage() {
+            localStorage.setItem('ordens-servico', JSON.stringify(orders));
+        }
+
+        // Calcular duração
+        function calculateDuration(inicio, fim) {
+            if (!inicio || !fim) return '-';
+            const [h1, m1] = inicio.split(':').map(Number);
+            const [h2, m2] = fim.split(':').map(Number);
+            const totalMin = (h2 * 60 + m2) - (h1 * 60 + m1);
+            if (totalMin < 0) return '-';
+            const hours = Math.floor(totalMin / 60);
+            const mins = totalMin % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        // Salvar ordem
+        function saveOrder() {
+            const numeroOS = document.getElementById('numeroOS').value.trim();
+            const descricao = document.getElementById('descricao').value.trim();
+            const data = document.getElementById('data').value;
+            const horaInicio = document.getElementById('horaInicio').value;
+            const horaFim = document.getElementById('horaFim').value;
+            const status = document.getElementById('status').value;
+
+            if (!numeroOS || !descricao || !data) {
+                alert('Preencha os campos obrigatórios: Nº O.S, Descrição e Data');
+                return;
+            }
+
+            const order = {
+                id: editingId || Date.now(),
+                numeroOS,
+                descricao,
+                data,
+                horaInicio,
+                horaFim,
+                status
+            };
+
+            if (editingId) {
+                const index = orders.findIndex(o => o.id === editingId);
+                orders[index] = order;
+            } else {
+                orders.push(order);
+            }
+
+            saveToStorage();
+            renderOrders();
+            updateStats();
+            clearForm();
+        }
+
+        // Editar ordem
+        function editOrder(id) {
+            const order = orders.find(o => o.id === id);
+            if (!order) return;
+
+            document.getElementById('numeroOS').value = order.numeroOS;
+            document.getElementById('descricao').value = order.descricao;
+            document.getElementById('data').value = order.data;
+            document.getElementById('horaInicio').value = order.horaInicio || '';
+            document.getElementById('horaFim').value = order.horaFim || '';
+            document.getElementById('status').value = order.status;
+
+            editingId = id;
+            document.getElementById('formTitle').textContent = '✏️ Editar O.S';
+            document.getElementById('btnText').textContent = 'Atualizar';
+            document.getElementById('btnCancel').style.display = 'flex';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Deletar ordem
+        function deleteOrder(id) {
+            if (confirm('Excluir esta O.S?')) {
+                orders = orders.filter(o => o.id !== id);
+                saveToStorage();
+                renderOrders();
+                updateStats();
+            }
+        }
+
+        // Cancelar edição
+        function cancelEdit() {
+            clearForm();
+        }
+
+        // Limpar formulário
+        function clearForm() {
+            document.getElementById('numeroOS').value = '';
+            document.getElementById('descricao').value = '';
+            document.getElementById('data').value = '';
+            document.getElementById('horaInicio').value = '';
+            document.getElementById('horaFim').value = '';
+            document.getElementById('status').value = 'Aberta';
+            editingId = null;
+            document.getElementById('formTitle').textContent = '➕ Nova O.S';
+            document.getElementById('btnText').textContent = 'Salvar';
+            document.getElementById('btnCancel').style.display = 'none';
+        }
+
+        // Renderizar ordens
+        function renderOrders() {
+            const container = document.getElementById('ordersList');
+            document.getElementById('orderCount').textContent = orders.length;
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        <h3>Nenhuma O.S cadastrada</h3>
+                        <p>Crie sua primeira ordem de serviço acima</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = orders.map(order => {
+                const statusClass = {
+                    'Aberta': 'status-aberta',
+                    'Em Andamento': 'status-andamento',
+                    'Pausada': 'status-pausada',
+                    'Concluída': 'status-concluida',
+                    'Cancelada': 'status-cancelada'
+                }[order.status] || 'status-aberta';
+
+                const dataFormatada = order.data ? new Date(order.data + 'T00:00:00').toLocaleDateString('pt-BR') : '-';
+                const duracao = calculateDuration(order.horaInicio, order.horaFim);
+
+                return `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <span class="order-number">${order.numeroOS}</span>
+                            <span class="status-badge ${statusClass}">${order.status}</span>
+                        </div>
+                        <div class="order-description">${order.descricao}</div>
+                        <div class="order-details">
+                            <span>📅 ${dataFormatada}</span>
+                            ${order.horaInicio ? `<span>🕐 Início: ${order.horaInicio}</span>` : ''}
+                            ${order.horaFim ? `<span>🕐 Fim: ${order.horaFim}</span>` : ''}
+                            ${order.horaInicio && order.horaFim ? `<span style="font-weight: 600; color: #c7d2fe;">⏱️ Duração: ${duracao}</span>` : ''}
+                        </div>
+                        <div class="order-actions">
+                            <button class="btn-icon btn-edit" onclick="editOrder(${order.id})" title="Editar">✏️</button>
+                            <button class="btn-icon btn-delete" onclick="deleteOrder(${order.id})" title="Excluir">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            document.getElementById('totalOS').textContent = orders.length;
+            
+            const concluidas = orders.filter(o => o.status === 'Concluída').length;
+            document.getElementById('totalConcluidas').textContent = concluidas;
+            
+            const hoje = new Date().toISOString().split('T')[0];
+            const hojeCont = orders.filter(o => o.data === hoje).length;
+            document.getElementById('totalHoje').textContent = hojeCont;
+        }
+
+        // Inicializar
+        loadOrders();
+    </script>
+</body>
+</html>
