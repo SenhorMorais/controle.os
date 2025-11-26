@@ -427,45 +427,99 @@
             document.getElementById('data').valueAsDate = hoje;
         }
 
-        // Renderiza a lista de ordens
+        // Renderiza a lista de ordens AGRUPADAS por número
         function renderOrders(lista = orders) {
             const cont = document.getElementById('ordersList');
-            document.getElementById('orderCount').textContent = lista.length;
+            
+            // Agrupa por número de O.S
+            const ordensAgrupadas = {};
+            lista.forEach(order => {
+                if (!ordensAgrupadas[order.numeroOS]) {
+                    ordensAgrupadas[order.numeroOS] = [];
+                }
+                ordensAgrupadas[order.numeroOS].push(order);
+            });
 
-            if (lista.length === 0) {
+            const osUnicas = Object.keys(ordensAgrupadas);
+            document.getElementById('orderCount').textContent = osUnicas.length;
+
+            if (osUnicas.length === 0) {
                 cont.innerHTML = '<div style="color:#c7d2fe; text-align:center; padding:2rem;">Nenhuma ordem cadastrada</div>';
                 return;
             }
 
-            cont.innerHTML = lista.map(order => {
+            cont.innerHTML = osUnicas.map(numeroOS => {
+                const apontamentos = ordensAgrupadas[numeroOS];
+                
+                // Ordena por data
+                apontamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+                
+                // Pega o status mais recente
+                const ultimoApontamento = apontamentos[apontamentos.length - 1];
+                const status = ultimoApontamento.status;
+                
                 const cls = {
                     'Aberta': 'status-aberta',
                     'Em Andamento': 'status-andamento',
                     'Pausada': 'status-pausada',
                     'Concluída': 'status-concluida',
                     'Cancelada': 'status-cancelada'
-                }[order.status] || 'status-aberta';
+                }[status] || 'status-aberta';
 
-                const dataObj = new Date(order.data + 'T00:00:00');
-                const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                // Calcula duração total
+                let duracaoTotalMinutos = 0;
+                apontamentos.forEach(apt => {
+                    if (apt.horaInicio && apt.horaFim) {
+                        const [h1, m1] = apt.horaInicio.split(':').map(Number);
+                        const [h2, m2] = apt.horaFim.split(':').map(Number);
+                        let duracao = (h2 * 60 + m2) - (h1 * 60 + m1);
+                        if (apt.descontarAlmoco === 'sim') {
+                            duracao -= 85;
+                        }
+                        if (duracao > 0) {
+                            duracaoTotalMinutos += duracao;
+                        }
+                    }
+                });
+
+                const horasTotal = Math.floor(duracaoTotalMinutos / 60);
+                const minutosTotal = duracaoTotalMinutos % 60;
+                const duracaoTotal = duracaoTotalMinutos > 0 ? `${horasTotal}h ${minutosTotal}m` : '-';
+
+                // Lista de apontamentos
+                const listaApontamentos = apontamentos.map(apt => {
+                    const dataFormatada = new Date(apt.data + 'T00:00:00').toLocaleDateString('pt-BR');
+                    const duracao = apt.horaInicio && apt.horaFim ? 
+                        calculateDuration(apt.horaInicio, apt.horaFim, apt.descontarAlmoco || 'nao') : '-';
+                    
+                    return `
+                        <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 0.5rem; margin-top: 0.5rem; border-left: 3px solid #6366f1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                                <div style="color:#c7d2fe; font-size:0.85rem;">
+                                    📅 ${dataFormatada}
+                                    ${apt.horaInicio ? ' | 🕐 ' + apt.horaInicio + ' - ' + apt.horaFim : ''}
+                                    ${apt.horaInicio && apt.horaFim ? ' | ⏱ ' + duracao : ''}
+                                    ${apt.descontarAlmoco === 'sim' ? ' | 🍽️' : ''}
+                                </div>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <button class='btn btn-secondary' style='padding:0.25rem 0.75rem; font-size: 0.8rem;' onclick='editOrder(${apt.id})'>✏️</button>
+                                    <button class='btn btn-danger' style='padding:0.25rem 0.75rem; font-size: 0.8rem;' onclick='deleteOrder(${apt.id})'>🗑️</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
 
                 return `<div class='order-card'>
                     <div class='order-header'>
-                        <span class='order-number'>${order.numeroOS}</span>
-                        <span class='status-badge ${cls}'>${order.status}</span>
+                        <span class='order-number'>${numeroOS}</span>
+                        <span class='status-badge ${cls}'>${status}</span>
                     </div>
-                    <div style='color:#c7d2fe; margin-top:0.5rem;'>${order.descricao}</div>
+                    <div style='color:#c7d2fe; margin-top:0.5rem;'>${ultimoApontamento.descricao}</div>
                     <div style='color:#c7d2fe; margin-top:0.75rem; font-size:0.9rem;'>
-                        📅 ${dataFormatada}<br>
-                        ${order.horaInicio ? '🕐 Início: ' + order.horaInicio + '<br>' : ''}
-                        ${order.horaFim ? '🕐 Fim: ' + order.horaFim + '<br>' : ''}
-                        ${(order.horaInicio && order.horaFim) ? '⏱ Duração: ' + calculateDuration(order.horaInicio, order.horaFim, order.descontarAlmoco || 'nao') : ''}
-                        ${order.descontarAlmoco === 'sim' ? '<br>🍽️ <span style="color: #fde047;">Almoço descontado (1h 25min)</span>' : ''}
+                        <strong>📊 Total: ${apontamentos.length} apontamento(s) | ⏱ Duração Total: ${duracaoTotal}</strong>
                     </div>
-                    <div style='margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;'>
-                        <button class='btn btn-secondary' style='padding:0.5rem 1rem;' onclick='editOrder(${order.id})'>✏️ Editar</button>
-                        <button class='btn btn-danger' style='padding:0.5rem 1rem;' onclick='deleteOrder(${order.id})'>🗑️ Excluir</button>
-                    </div>
+                    ${listaApontamentos}
                 </div>`;
             }).join('');
         }
@@ -660,16 +714,32 @@
                     </div>
             `;
 
-            // Estatísticas
-            const totalOS = ordens.length;
-            const concluidas = ordens.filter(o => o.status === 'Concluída').length;
-            const emAndamento = ordens.filter(o => o.status === 'Em Andamento').length;
-            const pendentes = ordens.filter(o => o.status === 'Aberta').length;
+            // Estatísticas - contando O.S únicas
+            const osUnicas = [...new Set(ordens.map(o => o.numeroOS))];
+            const totalOS = osUnicas.length;
+            
+            const osConcluidas = osUnicas.filter(numOS => {
+                const entradasDaOS = ordens.filter(o => o.numeroOS === numOS);
+                return entradasDaOS.every(o => o.status === 'Concluída');
+            });
+            const concluidas = osConcluidas.length;
+            
+            const osEmAndamento = osUnicas.filter(numOS => {
+                const entradasDaOS = ordens.filter(o => o.numeroOS === numOS);
+                return entradasDaOS.some(o => o.status === 'Em Andamento');
+            });
+            const emAndamento = osEmAndamento.length;
+            
+            const osPendentes = osUnicas.filter(numOS => {
+                const entradasDaOS = ordens.filter(o => o.numeroOS === numOS);
+                return entradasDaOS.some(o => o.status === 'Aberta');
+            });
+            const pendentes = osPendentes.length;
 
             html += `
                 <div class="stats">
                     <div class="stat-item">
-                        <div class="label">Total de O.S</div>
+                        <div class="label">Total de O.S Únicas</div>
                         <div class="value">${totalOS}</div>
                     </div>
                     <div class="stat-item">
@@ -700,7 +770,7 @@
                 }
             }
 
-            html += '<h2 style="color: #1f2937; margin: 30px 0 15px 0; font-size: 18px;">📋 Ordens de Serviço</h2>';
+            html += '<h2 style="color: #1f2937; margin: 30px 0 15px 0; font-size: 18px;">📋 Apontamentos de Ordens de Serviço</h2>';
 
             if (ordens.length === 0) {
                 html += '<p style="text-align: center; color: #9ca3af; padding: 40px;">Nenhuma ordem encontrada neste período</p>';
@@ -738,7 +808,7 @@
             html += `
                     <div class="footer">
                         <p>Relatório gerado pelo Sistema de Gestão de O.S</p>
-                        <p>Total de ${totalOS} ordem(ns) de serviço neste período</p>
+                        <p>${totalOS} O.S única(s) com ${ordens.length} apontamento(s) neste período</p>
                     </div>
                 </body>
                 </html>
