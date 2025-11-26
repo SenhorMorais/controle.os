@@ -472,10 +472,21 @@
 
         // Atualiza as estatísticas
         function updateStats() {
-            document.getElementById('totalOS').textContent = orders.length;
-            document.getElementById('totalConcluidas').textContent = orders.filter(o => o.status === 'Concluída').length;
+            // Conta O.S únicas (mesmo número = 1 O.S)
+            const osUnicas = [...new Set(orders.map(o => o.numeroOS))];
+            document.getElementById('totalOS').textContent = osUnicas.length;
+            
+            // Para concluídas, conta se TODAS as entradas daquela O.S estão concluídas
+            const osConcluidas = osUnicas.filter(numOS => {
+                const entradasDaOS = orders.filter(o => o.numeroOS === numOS);
+                return entradasDaOS.every(o => o.status === 'Concluída');
+            });
+            document.getElementById('totalConcluidas').textContent = osConcluidas.length;
+            
             const hoje = new Date().toISOString().split('T')[0];
-            document.getElementById('totalHoje').textContent = orders.filter(o => o.data === hoje).length;
+            // Para hoje, conta O.S únicas que tiveram apontamento hoje
+            const osHoje = [...new Set(orders.filter(o => o.data === hoje).map(o => o.numeroOS))];
+            document.getElementById('totalHoje').textContent = osHoje.length;
         }
 
         // FILTRO POR MÊS
