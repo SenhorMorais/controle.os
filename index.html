@@ -451,11 +451,11 @@
             cont.innerHTML = osUnicas.map(numeroOS => {
                 const apontamentos = ordensAgrupadas[numeroOS];
                 
-                // Ordena por data
-                apontamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+                // Ordena por data (mais recente primeiro)
+                apontamentos.sort((a, b) => new Date(b.data) - new Date(a.data));
                 
                 // Pega o status mais recente
-                const ultimoApontamento = apontamentos[apontamentos.length - 1];
+                const ultimoApontamento = apontamentos[0];
                 const status = ultimoApontamento.status;
                 
                 const cls = {
@@ -465,26 +465,6 @@
                     'Concluída': 'status-concluida',
                     'Cancelada': 'status-cancelada'
                 }[status] || 'status-aberta';
-
-                // Calcula duração total
-                let duracaoTotalMinutos = 0;
-                apontamentos.forEach(apt => {
-                    if (apt.horaInicio && apt.horaFim) {
-                        const [h1, m1] = apt.horaInicio.split(':').map(Number);
-                        const [h2, m2] = apt.horaFim.split(':').map(Number);
-                        let duracao = (h2 * 60 + m2) - (h1 * 60 + m1);
-                        if (apt.descontarAlmoco === 'sim') {
-                            duracao -= 85;
-                        }
-                        if (duracao > 0) {
-                            duracaoTotalMinutos += duracao;
-                        }
-                    }
-                });
-
-                const horasTotal = Math.floor(duracaoTotalMinutos / 60);
-                const minutosTotal = duracaoTotalMinutos % 60;
-                const duracaoTotal = duracaoTotalMinutos > 0 ? `${horasTotal}h ${minutosTotal}m` : '-';
 
                 // Lista de apontamentos
                 const listaApontamentos = apontamentos.map(apt => {
@@ -497,9 +477,9 @@
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
                                 <div style="color:#c7d2fe; font-size:0.85rem;">
                                     📅 ${dataFormatada}
-                                    ${apt.horaInicio ? ' | 🕐 ' + apt.horaInicio + ' - ' + apt.horaFim : ''}
+                                    ${apt.horaInicio ? ' | 🕐 ' + apt.horaInicio + ' - ' + (apt.horaFim || '...') : ''}
                                     ${apt.horaInicio && apt.horaFim ? ' | ⏱ ' + duracao : ''}
-                                    ${apt.descontarAlmoco === 'sim' ? ' | 🍽️' : ''}
+                                    ${apt.descontarAlmoco === 'sim' ? ' <span style="color: #fde047;">(🍽️ -1h25min)</span>' : ''}
                                 </div>
                                 <div style="display: flex; gap: 0.5rem;">
                                     <button class='btn btn-secondary' style='padding:0.25rem 0.75rem; font-size: 0.8rem;' onclick='editOrder(${apt.id})'>✏️</button>
@@ -516,8 +496,8 @@
                         <span class='status-badge ${cls}'>${status}</span>
                     </div>
                     <div style='color:#c7d2fe; margin-top:0.5rem;'>${ultimoApontamento.descricao}</div>
-                    <div style='color:#c7d2fe; margin-top:0.75rem; font-size:0.9rem;'>
-                        <strong>📊 Total: ${apontamentos.length} apontamento(s) | ⏱ Duração Total: ${duracaoTotal}</strong>
+                    <div style='color:#a5b4fc; margin-top:0.75rem; font-size:0.85rem; font-weight: 600;'>
+                        📊 ${apontamentos.length} apontamento(s)
                     </div>
                     ${listaApontamentos}
                 </div>`;
