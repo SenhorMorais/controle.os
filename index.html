@@ -183,6 +183,13 @@
                     <input type="time" id="horaFim" />
                 </div>
                 <div class="form-group">
+                    <label>Descontar Almoço? (1h 25min)</label>
+                    <select id="descontarAlmoco">
+                        <option value="nao">Não</option>
+                        <option value="sim">Sim</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Status *</label>
                     <select id="status">
                         <option value="Aberta">Aberta</option>
@@ -306,12 +313,19 @@
         }
 
         // Calcula duração entre dois horários
-        function calculateDuration(inicio, fim) {
+        function calculateDuration(inicio, fim, descontarAlmoco) {
             if (!inicio || !fim) return '-';
             const [h1, m1] = inicio.split(':').map(Number);
             const [h2, m2] = fim.split(':').map(Number);
-            const total = (h2 * 60 + m2) - (h1 * 60 + m1);
+            let total = (h2 * 60 + m2) - (h1 * 60 + m1);
             if (total < 0) return '-';
+            
+            // Desconta 1h 25min (85 minutos) se solicitado
+            if (descontarAlmoco === 'sim') {
+                total = total - 85;
+                if (total < 0) total = 0;
+            }
+            
             const horas = Math.floor(total / 60);
             const minutos = total % 60;
             return `${horas}h ${minutos}m`;
@@ -325,6 +339,7 @@
             const inicio = document.getElementById('horaInicio').value;
             const fim = document.getElementById('horaFim').value;
             const stat = document.getElementById('status').value;
+            const almoco = document.getElementById('descontarAlmoco').value;
 
             if (!numOS || !desc || !dt) {
                 alert('⚠️ Preencha os campos obrigatórios (Nº OS, Descrição e Data)');
@@ -338,7 +353,8 @@
                 data: dt,
                 horaInicio: inicio,
                 horaFim: fim,
-                status: stat
+                status: stat,
+                descontarAlmoco: almoco
             };
 
             if (editingId) {
@@ -368,6 +384,7 @@
             document.getElementById('horaInicio').value = o.horaInicio || '';
             document.getElementById('horaFim').value = o.horaFim || '';
             document.getElementById('status').value = o.status;
+            document.getElementById('descontarAlmoco').value = o.descontarAlmoco || 'nao';
 
             editingId = id;
             document.getElementById('formTitle').textContent = '✏️ Editar O.S';
@@ -399,6 +416,7 @@
             document.getElementById('horaInicio').value = '';
             document.getElementById('horaFim').value = '';
             document.getElementById('status').value = 'Aberta';
+            document.getElementById('descontarAlmoco').value = 'nao';
             editingId = null;
             document.getElementById('formTitle').textContent = '➕ Nova O.S';
             document.getElementById('btnText').textContent = 'Salvar';
@@ -441,7 +459,8 @@
                         📅 ${dataFormatada}<br>
                         ${order.horaInicio ? '🕐 Início: ' + order.horaInicio + '<br>' : ''}
                         ${order.horaFim ? '🕐 Fim: ' + order.horaFim + '<br>' : ''}
-                        ${(order.horaInicio && order.horaFim) ? '⏱ Duração: ' + calculateDuration(order.horaInicio, order.horaFim) : ''}
+                        ${(order.horaInicio && order.horaFim) ? '⏱ Duração: ' + calculateDuration(order.horaInicio, order.horaFim, order.descontarAlmoco || 'nao') : ''}
+                        ${order.descontarAlmoco === 'sim' ? '<br>🍽️ <span style="color: #fde047;">Almoço descontado (1h 25min)</span>' : ''}
                     </div>
                     <div style='margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;'>
                         <button class='btn btn-secondary' style='padding:0.5rem 1rem;' onclick='editOrder(${order.id})'>✏️ Editar</button>
@@ -697,7 +716,8 @@
                                 📅 Data: ${dataFormatada}<br>
                                 ${order.horaInicio ? '🕐 Início: ' + order.horaInicio + '<br>' : ''}
                                 ${order.horaFim ? '🕐 Fim: ' + order.horaFim + '<br>' : ''}
-                                ${(order.horaInicio && order.horaFim) ? '⏱ Duração: ' + calculateDuration(order.horaInicio, order.horaFim) : ''}
+                                ${(order.horaInicio && order.horaFim) ? '⏱ Duração: ' + calculateDuration(order.horaInicio, order.horaFim, order.descontarAlmoco || 'nao') : ''}
+                                ${order.descontarAlmoco === 'sim' ? '<br>🍽️ Almoço descontado (1h 25min)' : ''}
                             </div>
                         </div>
                     `;
