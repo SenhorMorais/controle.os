@@ -186,114 +186,12 @@
             font-size: 1rem;
             transition: all 0.3s ease;
         }
-        .form-group input::placeholder, .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             outline: none;
             border-color: #6366f1;
             background: rgba(255, 255, 255, 0.25);
             box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
             transform: scale(1.02);
-        }
-        
-        /* Atalhos de teclado */
-        .keyboard-shortcuts {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 1rem;
-            border-radius: 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 1000;
-            max-width: 300px;
-            display: none;
-        }
-        .keyboard-shortcuts.show {
-            display: block;
-            animation: slideIn 0.3s ease;
-        }
-        .keyboard-shortcuts h4 {
-            color: white;
-            margin: 0 0 0.5rem 0;
-            font-size: 0.9rem;
-        }
-        .keyboard-shortcuts ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .keyboard-shortcuts li {
-            color: #c7d2fe;
-            font-size: 0.8rem;
-            margin: 0.25rem 0;
-            display: flex;
-            justify-content: space-between;
-        }
-        .keyboard-shortcuts kbd {
-            background: rgba(99, 102, 241, 0.3);
-            padding: 0.15rem 0.4rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-            border: 1px solid rgba(99, 102, 241, 0.5);
-        }
-        
-        /* Botão de ajuda */
-        .help-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(99, 102, 241, 0.5);
-            transition: all 0.3s ease;
-            z-index: 999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .help-button:hover {
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.7);
-        }
-        
-        /* Modo de busca rápida */
-        .quick-search {
-            position: relative;
-        }
-        .quick-search input {
-            padding-right: 3rem;
-        }
-        .quick-search .search-icon {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.5);
-            pointer-events: none;
-        }
-        
-        /* Indicador de salvamento */
-        .save-indicator {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            background: rgba(16, 185, 129, 0.9);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
-            z-index: 9998;
-            display: none;
-            animation: fadeIn 0.3s ease;
         }
         .form-group textarea { min-height: 100px; resize: vertical; font-family: inherit; }
         .btn-group { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
@@ -665,33 +563,7 @@
             <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
                 💡 Aqui ficam todas as suas O.S. Clique para editar ✏️ ou excluir 🗑️
             </p>
-            
-            <!-- Busca rápida -->
-            <div class="quick-search" style="margin-bottom: 1.5rem;">
-                <input 
-                    type="text" 
-                    id="searchBox" 
-                    placeholder="🔍 Buscar O.S por número ou descrição..." 
-                    style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.75rem; padding: 0.75rem 1rem; color: white; font-size: 1rem;"
-                    oninput="buscarOS(this.value)"
-                />
-            </div>
-            
             <div class="orders-list" id="ordersList"></div>
-        </div>
-        
-        <!-- Botão de Ajuda -->
-        <button class="help-button" onclick="toggleHelp()" title="Atalhos de Teclado">❓</button>
-        
-        <!-- Atalhos de Teclado -->
-        <div class="keyboard-shortcuts" id="keyboardShortcuts">
-            <h4>⌨️ Atalhos de Teclado</h4>
-            <ul>
-                <li><span>Nova O.S</span> <kbd>Ctrl + N</kbd></li>
-                <li><span>Buscar</span> <kbd>Ctrl + F</kbd></li>
-                <li><span>Salvar</span> <kbd>Ctrl + S</kbd></li>
-                <li><span>Fechar ajuda</span> <kbd>Esc</kbd></li>
-            </ul>
         </div>
     </div>
 
@@ -893,18 +765,17 @@
             document.getElementById('orderCount').textContent = osUnicas.length;
 
             if (osUnicas.length === 0) {
-                const isEmpty = lista.length === 0 && orders.length === 0;
                 cont.innerHTML = `
                     <div class="empty-state">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">${isEmpty ? '📋' : '🔍'}</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">${isEmpty ? 'Nenhuma O.S cadastrada ainda' : 'Nenhum resultado encontrado'}</h3>
-                        <p>${isEmpty ? 'Comece adicionando sua primeira Ordem de Serviço acima! ⬆️' : 'Tente buscar com outros termos'}</p>
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Nenhuma O.S cadastrada ainda</h3>
+                        <p>Comece adicionando sua primeira Ordem de Serviço acima! ⬆️</p>
                     </div>
                 `;
                 return;
             }
 
-            cont.innerHTML = osUnicas.map((numeroOS, index) => {
+            cont.innerHTML = osUnicas.map(numeroOS => {
                 const apontamentos = ordensAgrupadas[numeroOS];
                 
                 // Ordena por data (mais recente primeiro)
@@ -921,26 +792,6 @@
                     'Concluída': 'status-concluida',
                     'Cancelada': 'status-cancelada'
                 }[status] || 'status-aberta';
-
-                // Calcula duração total
-                let duracaoTotalMinutos = 0;
-                apontamentos.forEach(apt => {
-                    if (apt.horaInicio && apt.horaFim) {
-                        const [h1, m1] = apt.horaInicio.split(':').map(Number);
-                        const [h2, m2] = apt.horaFim.split(':').map(Number);
-                        let duracao = (h2 * 60 + m2) - (h1 * 60 + m1);
-                        if (apt.descontarAlmoco === 'sim') {
-                            duracao -= 85;
-                        }
-                        if (duracao > 0) {
-                            duracaoTotalMinutos += duracao;
-                        }
-                    }
-                });
-
-                const horasTotal = Math.floor(duracaoTotalMinutos / 60);
-                const minutosTotal = duracaoTotalMinutos % 60;
-                const duracaoTotal = duracaoTotalMinutos > 0 ? `${horasTotal}h ${minutosTotal}m` : '-';
 
                 // Lista de apontamentos
                 const listaApontamentos = apontamentos.map(apt => {
@@ -966,19 +817,14 @@
                     `;
                 }).join('');
 
-                return `<div class='order-card' style='animation: slideIn ${0.2 + (index * 0.1)}s ease;'>
+                return `<div class='order-card' style='animation: slideIn 0.4s ease;'>
                     <div class='order-header'>
                         <span class='order-number'>${numeroOS}</span>
                         <span class='status-badge ${cls}'>${status}</span>
                     </div>
                     <div style='color:#c7d2fe; margin-top:0.5rem;'>${ultimoApontamento.descricao}</div>
-                    <div style='display: flex; justify-content: space-between; align-items: center; margin-top:0.75rem; flex-wrap: wrap; gap: 0.5rem;'>
-                        <div style='color:#a5b4fc; font-size:0.85rem; font-weight: 600;'>
-                            📊 ${apontamentos.length} apontamento(s)
-                        </div>
-                        ${duracaoTotalMinutos > 0 ? `<div style='color:#6ee7b7; font-size:0.85rem; font-weight: 600; background: rgba(16,185,129,0.2); padding: 0.25rem 0.75rem; border-radius: 0.5rem;'>
-                            ⏱ Total: ${duracaoTotal}
-                        </div>` : ''}
+                    <div style='color:#a5b4fc; margin-top:0.75rem; font-size:0.85rem; font-weight: 600;'>
+                        📊 ${apontamentos.length} apontamento(s)
                     </div>
                     ${listaApontamentos}
                 </div>`;
@@ -1100,78 +946,6 @@
         const hoje = new Date();
         const dataInput = document.getElementById('data');
         dataInput.valueAsDate = hoje;
-
-        // ========== BUSCA RÁPIDA ==========
-        function buscarOS(termo) {
-            if (!termo.trim()) {
-                renderOrders();
-                return;
-            }
-            
-            const termoLower = termo.toLowerCase();
-            const filtradas = orders.filter(o => 
-                o.numeroOS.toLowerCase().includes(termoLower) ||
-                o.descricao.toLowerCase().includes(termoLower)
-            );
-            
-            renderOrders(filtradas);
-        }
-
-        // ========== ATALHOS DE TECLADO ==========
-        document.addEventListener('keydown', function(e) {
-            // Ctrl + N - Nova O.S
-            if (e.ctrlKey && e.key === 'n') {
-                e.preventDefault();
-                document.getElementById('numeroOS').focus();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            
-            // Ctrl + F - Buscar
-            if (e.ctrlKey && e.key === 'f') {
-                e.preventDefault();
-                document.getElementById('searchBox').focus();
-            }
-            
-            // Ctrl + S - Salvar
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                saveOrder();
-            }
-            
-            // ESC - Fechar ajuda ou cancelar edição
-            if (e.key === 'Escape') {
-                const shortcuts = document.getElementById('keyboardShortcuts');
-                if (shortcuts.classList.contains('show')) {
-                    shortcuts.classList.remove('show');
-                } else if (editingId) {
-                    cancelEdit();
-                }
-            }
-        });
-
-        function toggleHelp() {
-            const shortcuts = document.getElementById('keyboardShortcuts');
-            shortcuts.classList.toggle('show');
-        }
-
-        // ========== AUTO-SAVE INDICATOR ==========
-        function saveToStorage() {
-            localStorage.setItem('ordens-servico', JSON.stringify(orders));
-            
-            // Mostra indicador de salvamento
-            let indicator = document.querySelector('.save-indicator');
-            if (!indicator) {
-                indicator = document.createElement('div');
-                indicator.className = 'save-indicator';
-                indicator.textContent = '💾 Salvo automaticamente';
-                document.body.appendChild(indicator);
-            }
-            
-            indicator.style.display = 'block';
-            setTimeout(() => {
-                indicator.style.display = 'none';
-            }, 2000);
-        }
 
         // ========== FUNÇÕES PARA GERAR PDF ==========
         
@@ -1399,7 +1173,6 @@
                     html += `
                             <div class="duracao-total">
                                 ⏱ Duração Total Acumulada: ${duracaoTotal}
-                                ${apontamentos.length > 1 ? `<span style="font-size: 0.85rem; opacity: 0.8;"> (${apontamentos.length} apontamentos)</span>` : ''}
                             </div>
                         </div>
                     `;
