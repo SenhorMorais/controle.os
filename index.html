@@ -24,9 +24,7 @@
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1042 25%, #2d1b69 50%, #1a1042 75%, #0a0e27 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1042 50%, #0a0e27 100%);
             min-height: 100vh;
             padding: 1rem;
             position: relative;
@@ -40,9 +38,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.08) 0%, transparent 50%);
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
             pointer-events: none;
             z-index: 0;
         }
@@ -54,8 +50,7 @@
             font-size: 2.5rem; 
             font-weight: bold; 
             margin-bottom: 0.5rem;
-            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5), 0 0 40px rgba(99, 102, 241, 0.3);
-            animation: pulse 3s ease-in-out infinite;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
         }
         .header p { color: #c7d2fe; font-size: 1rem; }
         .stats-grid { 
@@ -66,35 +61,18 @@
         }
         .stat-card {
             background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.3) 100%);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(10px);
             border-radius: 1rem;
             padding: 1.5rem;
             color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(99, 102, 241, 0.3);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideIn 0.6s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            transition: all 0.6s;
-        }
-        .stat-card:hover::before {
-            left: 100%;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            animation: slideIn 0.4s ease;
         }
         .stat-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(59, 130, 246, 0.4);
-            border-color: rgba(99, 102, 241, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
         }
         .stat-card p { font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem; }
         .stat-card h2 { font-size: 2.5rem; font-weight: bold; }
@@ -114,18 +92,13 @@
         }
         .card {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(10px);
             border-radius: 1rem;
             padding: 1.5rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.8s ease;
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease;
         }
         .card h2 { 
             color: white; 
@@ -153,8 +126,7 @@
             outline: none;
             border-color: #6366f1;
             background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
-            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
         }
         
         /* Atalhos de teclado */
@@ -267,32 +239,11 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
+            transition: all 0.2s ease;
         }
         .btn:hover { 
-            transform: translateY(-3px) scale(1.05); 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.5);
-        }
-        .btn:active {
-            transform: translateY(-1px) scale(1.02);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
         }
         .btn-primary { 
             background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); 
@@ -325,27 +276,12 @@
             padding: 1.25rem;
             border-radius: 0.75rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        .order-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: left 0.6s;
-        }
-        .order-card:hover::before {
-            left: 100%;
+            transition: all 0.2s ease;
         }
         .order-card:hover { 
-            transform: translateY(-5px) scale(1.01); 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.3);
-            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border-color: rgba(99, 102, 241, 0.3);
         }
         .order-header { display: flex; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap; align-items: center; }
         .order-number { color: white; font-size: 1.5rem; font-weight: bold; }
@@ -355,12 +291,7 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-        }
-        .status-badge:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         .status-aberta { 
             background: linear-gradient(135deg, rgba(156,163,175,0.4), rgba(107,114,128,0.4)); 
@@ -398,11 +329,7 @@
         .donut-chart {
             width: 100%;
             height: auto;
-            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
-            transition: transform 0.3s ease;
-        }
-        .donut-chart:hover {
-            transform: scale(1.05);
+            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.2));
         }
         .chart-legend {
             display: flex;
@@ -420,11 +347,6 @@
             padding: 0.5rem 1rem;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-        .legend-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
         }
         .legend-color {
             width: 20px;
@@ -493,6 +415,13 @@
                 <p>📅 O.S Apontadas Hoje</p>
                 <h2 id="totalHoje">0</h2>
             </div>
+        </div>
+        
+        <!-- Debug: Mostrar dados salvos -->
+        <div style="display: none;">
+            <button onclick="verificarDados()" style="position: fixed; bottom: 80px; right: 20px; background: red; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; z-index: 9999;">
+                🔧 Verificar Dados
+            </button>
         </div>
 
         <!-- Formulário -->
@@ -627,7 +556,7 @@
             </p>
             
             <!-- Busca rápida -->
-            <div class="quick-search" style="margin-bottom: 1.5rem;">
+            <div style="margin-bottom: 1.5rem;">
                 <input 
                     type="text" 
                     id="searchBox" 
@@ -638,20 +567,6 @@
             </div>
             
             <div class="orders-list" id="ordersList"></div>
-        </div>
-        
-        <!-- Botão de Ajuda -->
-        <button class="help-button" onclick="toggleHelp()" title="Atalhos de Teclado">❓</button>
-        
-        <!-- Atalhos de Teclado -->
-        <div class="keyboard-shortcuts" id="keyboardShortcuts">
-            <h4>⌨️ Atalhos de Teclado</h4>
-            <ul>
-                <li><span>Nova O.S</span> <kbd>Ctrl + N</kbd></li>
-                <li><span>Buscar</span> <kbd>Ctrl + F</kbd></li>
-                <li><span>Salvar</span> <kbd>Ctrl + S</kbd></li>
-                <li><span>Fechar ajuda</span> <kbd>Esc</kbd></li>
-            </ul>
         </div>
     </div>
 
@@ -926,7 +841,7 @@
                     `;
                 }).join('');
 
-                return `<div class='order-card' style='animation: slideIn ${0.2 + (index * 0.1)}s ease;'>
+                return `<div class='order-card' style='animation: none;'>
                     <div class='order-header'>
                         <span class='order-number'>${numeroOS}</span>
                         <span class='status-badge ${cls}'>${status}</span>
@@ -951,10 +866,13 @@
             const osUnicas = [...new Set(orders.map(o => o.numeroOS))];
             document.getElementById('totalOS').textContent = osUnicas.length;
             
-            // Para concluídas, conta se TODAS as entradas daquela O.S estão concluídas
+            // Para concluídas, verifica se o último apontamento está concluído
             const osConcluidas = osUnicas.filter(numOS => {
                 const entradasDaOS = orders.filter(o => o.numeroOS === numOS);
-                return entradasDaOS.every(o => o.status === 'Concluída');
+                // Ordena por data (mais recente primeiro)
+                entradasDaOS.sort((a, b) => new Date(b.data) - new Date(a.data));
+                // Verifica se o último apontamento está concluído
+                return entradasDaOS[0].status === 'Concluída';
             });
             document.getElementById('totalConcluidas').textContent = osConcluidas.length;
             
@@ -1079,40 +997,19 @@
 
         // ========== ATALHOS DE TECLADO ==========
         document.addEventListener('keydown', function(e) {
-            // Ctrl + N - Nova O.S
-            if (e.ctrlKey && e.key === 'n') {
-                e.preventDefault();
-                document.getElementById('numeroOS').focus();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-            
-            // Ctrl + F - Buscar
-            if (e.ctrlKey && e.key === 'f') {
-                e.preventDefault();
-                document.getElementById('searchBox').focus();
-            }
-            
             // Ctrl + S - Salvar
             if (e.ctrlKey && e.key === 's') {
                 e.preventDefault();
                 saveOrder();
             }
             
-            // ESC - Fechar ajuda ou cancelar edição
+            // ESC - Cancelar edição
             if (e.key === 'Escape') {
-                const shortcuts = document.getElementById('keyboardShortcuts');
-                if (shortcuts.classList.contains('show')) {
-                    shortcuts.classList.remove('show');
-                } else if (editingId) {
+                if (editingId) {
                     cancelEdit();
                 }
             }
         });
-
-        function toggleHelp() {
-            const shortcuts = document.getElementById('keyboardShortcuts');
-            shortcuts.classList.toggle('show');
-        }
 
         // ========== AUTO-SAVE INDICATOR ==========
         function saveToStorage() {
@@ -1132,6 +1029,20 @@
                 indicator.style.display = 'none';
             }, 2000);
         }
+        
+        // ========== VERIFICAR DADOS (DEBUG) ==========
+        function verificarDados() {
+            const saved = localStorage.getItem('ordens-servico');
+            if (saved) {
+                const dados = JSON.parse(saved);
+                alert(`✅ Encontrei ${dados.length} O.S salvas!\n\nRecarregando...`);
+                location.reload();
+            } else {
+                alert('❌ Nenhum dado encontrado no localStorage');
+            }
+        }
+        
+        console.log('📊 Sistema iniciado. Total de O.S carregadas:', orders.length);
 
         // ========== FUNÇÕES PARA GERAR PDF ==========
         
@@ -1236,17 +1147,29 @@
             const osUnicas = Object.keys(ordensAgrupadas);
             const totalOS = osUnicas.length;
             
+            // Para concluídas, verifica se o último apontamento está concluído
             const osConcluidas = osUnicas.filter(numOS => {
                 const entradasDaOS = ordensAgrupadas[numOS];
-                return entradasDaOS.every(o => o.status === 'Concluída');
+                entradasDaOS.sort((a, b) => new Date(b.data) - new Date(a.data));
+                return entradasDaOS[0].status === 'Concluída';
             });
             const concluidas = osConcluidas.length;
             
+            // Para em andamento, verifica se o último apontamento está em andamento
             const osEmAndamento = osUnicas.filter(numOS => {
                 const entradasDaOS = ordensAgrupadas[numOS];
-                return entradasDaOS.some(o => o.status === 'Em Andamento');
+                entradasDaOS.sort((a, b) => new Date(b.data) - new Date(a.data));
+                return entradasDaOS[0].status === 'Em Andamento';
             });
             const emAndamento = osEmAndamento.length;
+            
+            // Para pendentes, verifica se o último apontamento está aberto
+            const osPendentes = osUnicas.filter(numOS => {
+                const entradasDaOS = ordensAgrupadas[numOS];
+                entradasDaOS.sort((a, b) => new Date(b.data) - new Date(a.data));
+                return entradasDaOS[0].status === 'Aberta';
+            });
+            const pendentes = osPendentes.length; osEmAndamento.length;
             
             const osPendentes = osUnicas.filter(numOS => {
                 const entradasDaOS = ordensAgrupadas[numOS];
