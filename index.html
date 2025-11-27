@@ -966,6 +966,15 @@
         }
 
         function gerarPDF(ordens, titulo, tipo, ano, mes) {
+            // Agrupa ordens por número
+            const ordensAgrupadas = {};
+            ordens.forEach(order => {
+                if (!ordensAgrupadas[order.numeroOS]) {
+                    ordensAgrupadas[order.numeroOS] = [];
+                }
+                ordensAgrupadas[order.numeroOS].push(order);
+            });
+
             // Criar conteúdo HTML para impressão
             let html = `
                 <!DOCTYPE html>
@@ -983,17 +992,21 @@
                         .stat-item { text-align: center; }
                         .stat-item .label { font-size: 12px; color: #666; }
                         .stat-item .value { font-size: 24px; font-weight: bold; color: #6366f1; }
-                        .order { border: 1px solid #e5e7eb; margin: 15px 0; padding: 15px; border-radius: 8px; page-break-inside: avoid; }
-                        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-                        .order-number { font-size: 18px; font-weight: bold; color: #1f2937; }
+                        .order-group { border: 2px solid #e5e7eb; margin: 20px 0; padding: 20px; border-radius: 12px; page-break-inside: avoid; background: #fafafa; }
+                        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb; }
+                        .order-number { font-size: 20px; font-weight: bold; color: #1f2937; }
                         .status { padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
                         .status-aberta { background: #e5e7eb; color: #4b5563; }
                         .status-andamento { background: #dbeafe; color: #1e40af; }
                         .status-pausada { background: #fef3c7; color: #92400e; }
                         .status-concluida { background: #d1fae5; color: #065f46; }
                         .status-cancelada { background: #fee2e2; color: #991b1b; }
-                        .order-desc { color: #4b5563; margin: 10px 0; }
-                        .order-details { font-size: 13px; color: #6b7280; }
+                        .order-desc { color: #4b5563; margin: 10px 0; padding: 10px; background: white; border-radius: 6px; }
+                        .apontamentos-title { font-size: 14px; font-weight: bold; color: #6366f1; margin: 15px 0 10px 0; }
+                        .apontamento-item { background: white; border-left: 4px solid #6366f1; padding: 12px; margin: 8px 0; border-radius: 6px; }
+                        .apontamento-item .data { font-weight: bold; color: #1f2937; margin-bottom: 5px; }
+                        .apontamento-item .detalhes { font-size: 13px; color: #6b7280; }
+                        .duracao-total { background: #dbeafe; padding: 10px; border-radius: 6px; margin-top: 10px; font-weight: bold; color: #1e40af; text-align: right; }
                         .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 15px; }
                     </style>
                 </head>
@@ -1005,23 +1018,23 @@
             `;
 
             // Estatísticas - contando O.S únicas
-            const osUnicas = [...new Set(ordens.map(o => o.numeroOS))];
+            const osUnicas = Object.keys(ordensAgrupadas);
             const totalOS = osUnicas.length;
             
             const osConcluidas = osUnicas.filter(numOS => {
-                const entradasDaOS = ordens.filter(o => o.numeroOS === numOS);
+                const entradasDaOS = ordensAgrupadas[numOS];
                 return entradasDaOS.every(o => o.status === 'Concluída');
             });
             const concluidas = osConcluidas.length;
             
             const osEmAndamento = osUnicas.filter(numOS => {
-                const entradasDaOS = ordens.filter(o => o.numeroOS === numOS);
+                const entradasDaOS = ordensAgrupadas[numOS];
                 return entradasDaOS.some(o => o.status === 'Em Andamento');
             });
             const emAndamento = osEmAndamento.length;
             
             const osPendentes = osUnicas.filter(numOS => {
-                const entradasDaOS = ordens.filter(o => o.numeroOS === numOS);
+                const entradasDaOS = ordensAgrupadas[numOS];
                 return entradasDaOS.some(o => o.status === 'Aberta');
             });
             const pendentes = osPendentes.length;
@@ -1060,35 +1073,77 @@
                 }
             }
 
-            html += '<h2 style="color: #1f2937; margin: 30px 0 15px 0; font-size: 18px;">📋 Apontamentos de Ordens de Serviço</h2>';
+            html += '<h2 style="color: #1f2937; margin: 30px 0 15px 0; font-size: 18px;">📋 Ordens de Serviço Agrupadas</h2>';
 
-            if (ordens.length === 0) {
+            if (osUnicas.length === 0) {
                 html += '<p style="text-align: center; color: #9ca3af; padding: 40px;">Nenhuma ordem encontrada neste período</p>';
             } else {
-                ordens.sort((a, b) => new Date(b.data) - new Date(a.data)).forEach(order => {
+                // Gera HTML para cada O.S agrupada
+                osUnicas.forEach(numeroOS => {
+                    const apontamentos = ordensAgrupadas[numeroOS];
+                    apontamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+                    
+                    const ultimoApontamento = apontamentos[apontamentos.length - 1];
+                    const status = ultimoApontamento.status;
                     const statusClass = {
                         'Aberta': 'status-aberta',
                         'Em Andamento': 'status-andamento',
                         'Pausada': 'status-pausada',
                         'Concluída': 'status-concluida',
                         'Cancelada': 'status-cancelada'
-                    }[order.status] || 'status-aberta';
+                    }[status] || 'status-aberta';
 
-                    const dataFormatada = new Date(order.data + 'T00:00:00').toLocaleDateString('pt-BR');
+                    // Calcula duração total
+                    let duracaoTotalMinutos = 0;
+                    apontamentos.forEach(apt => {
+                        if (apt.horaInicio && apt.horaFim) {
+                            const [h1, m1] = apt.horaInicio.split(':').map(Number);
+                            const [h2, m2] = apt.horaFim.split(':').map(Number);
+                            let duracao = (h2 * 60 + m2) - (h1 * 60 + m1);
+                            if (apt.descontarAlmoco === 'sim') {
+                                duracao -= 85;
+                            }
+                            if (duracao > 0) {
+                                duracaoTotalMinutos += duracao;
+                            }
+                        }
+                    });
+
+                    const horasTotal = Math.floor(duracaoTotalMinutos / 60);
+                    const minutosTotal = duracaoTotalMinutos % 60;
+                    const duracaoTotal = duracaoTotalMinutos > 0 ? `${horasTotal}h ${minutosTotal}min` : 'Não informado';
 
                     html += `
-                        <div class="order">
+                        <div class="order-group">
                             <div class="order-header">
-                                <span class="order-number">O.S ${order.numeroOS}</span>
-                                <span class="status ${statusClass}">${order.status}</span>
+                                <span class="order-number">O.S ${numeroOS}</span>
+                                <span class="status ${statusClass}">${status}</span>
                             </div>
-                            <div class="order-desc">${order.descricao}</div>
-                            <div class="order-details">
-                                📅 Data: ${dataFormatada}<br>
-                                ${order.horaInicio ? '🕐 Início: ' + order.horaInicio + '<br>' : ''}
-                                ${order.horaFim ? '🕐 Fim: ' + order.horaFim + '<br>' : ''}
-                                ${(order.horaInicio && order.horaFim) ? '⏱ Duração: ' + calculateDuration(order.horaInicio, order.horaFim, order.descontarAlmoco || 'nao') : ''}
-                                ${order.descontarAlmoco === 'sim' ? '<br>🍽️ Almoço descontado (1h 25min)' : ''}
+                            <div class="order-desc"><strong>Descrição:</strong> ${ultimoApontamento.descricao}</div>
+                            
+                            <div class="apontamentos-title">📊 Apontamentos (${apontamentos.length}):</div>
+                    `;
+
+                    apontamentos.forEach(apt => {
+                        const dataFormatada = new Date(apt.data + 'T00:00:00').toLocaleDateString('pt-BR');
+                        const duracao = apt.horaInicio && apt.horaFim ? 
+                            calculateDuration(apt.horaInicio, apt.horaFim, apt.descontarAlmoco || 'nao') : 'Não informado';
+
+                        html += `
+                            <div class="apontamento-item">
+                                <div class="data">📅 ${dataFormatada}</div>
+                                <div class="detalhes">
+                                    ${apt.horaInicio ? '🕐 ' + apt.horaInicio + ' - ' + (apt.horaFim || '...') : 'Horários não informados'}<br>
+                                    ${apt.horaInicio && apt.horaFim ? '⏱ Duração: ' + duracao : ''}
+                                    ${apt.descontarAlmoco === 'sim' ? ' <span style="color: #f59e0b;">(🍽️ Almoço descontado: -1h25min)</span>' : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    html += `
+                            <div class="duracao-total">
+                                ⏱ Duração Total Acumulada: ${duracaoTotal}
                             </div>
                         </div>
                     `;
