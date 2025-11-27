@@ -32,32 +32,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Otimizações para performance mobile */
-        * {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-        }
-        
-        input, select, textarea, button {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        
-        /* Desativa animações complexas em telas pequenas */
-        @media (max-width: 768px) {
-            body::after { display: none; } /* Remove partículas animadas */
-            .stat-card::before { display: none; }
-            .order-card::before { display: none; }
-            .btn::before { display: none; }
-            
-            * { animation-duration: 0.2s !important; }
-            
-            .stat-card:hover, .order-card:hover, .card:hover {
-                transform: none;
-            }
-        }
-        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #0a0e27 0%, #1a1042 25%, #2d1b69 50%, #1a1042 75%, #0a0e27 100%);
@@ -1145,14 +1119,11 @@
 
         // ========== ATALHOS DE TECLADO ==========
         document.addEventListener('keydown', function(e) {
-            // Ctrl + N - Nova O.S (CORRIGIDO - não abre nova aba)
+            // Ctrl + N - Nova O.S
             if (e.ctrlKey && e.key === 'n') {
                 e.preventDefault();
-                e.stopPropagation();
-                clearForm();
                 document.getElementById('numeroOS').focus();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                return false;
             }
             
             // Ctrl + F - Buscar
@@ -1176,7 +1147,7 @@
                     cancelEdit();
                 }
             }
-        }, true);
+        });
 
         function toggleHelp() {
             const shortcuts = document.getElementById('keyboardShortcuts');
