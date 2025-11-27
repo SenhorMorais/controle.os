@@ -10,37 +10,141 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #312e81 50%, #0f172a 100%);
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1042 25%, #2d1b69 50%, #1a1042 75%, #0a0e27 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             padding: 1rem;
+            position: relative;
+            overflow-x: hidden;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 2rem; }
-        .header h1 { color: white; font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem; }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+        .header { text-align: center; margin-bottom: 2rem; animation: slideIn 0.6s ease; }
+        .header h1 { 
+            color: white; 
+            font-size: 2.5rem; 
+            font-weight: bold; 
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5), 0 0 40px rgba(99, 102, 241, 0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
         .header p { color: #c7d2fe; font-size: 1rem; }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 1rem; 
+            margin-bottom: 2rem;
+        }
         .stat-card {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.3) 100%);
+            backdrop-filter: blur(20px);
             border-radius: 1rem;
             padding: 1.5rem;
             color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideIn 0.6s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+        }
+        .stat-card:hover::before {
+            left: 100%;
+        }
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(59, 130, 246, 0.4);
+            border-color: rgba(99, 102, 241, 0.6);
         }
         .stat-card p { font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem; }
         .stat-card h2 { font-size: 2.5rem; font-weight: bold; }
-        .stat-card.green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .stat-card.purple { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+        .stat-card.green { 
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+        .stat-card.green:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(16, 185, 129, 0.4);
+        }
+        .stat-card.purple { 
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(124, 58, 237, 0.3) 100%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(139, 92, 246, 0.2);
+        }
+        .stat-card.purple:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(139, 92, 246, 0.4);
+        }
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
             border-radius: 1rem;
             padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.8s ease;
+            transition: all 0.3s ease;
         }
-        .card h2 { color: white; font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: bold; }
+        .card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
+        }
+        .card h2 { 
+            color: white; 
+            font-size: 1.5rem; 
+            margin-bottom: 1.5rem; 
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+        }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
         .form-group { display: flex; flex-direction: column; }
         .form-group label { color: #c7d2fe; font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500; }
@@ -57,6 +161,8 @@
             outline: none;
             border-color: #6366f1;
             background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
+            transform: scale(1.02);
         }
         .form-group textarea { min-height: 100px; resize: vertical; font-family: inherit; }
         .btn-group { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
@@ -70,21 +176,86 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); }
-        .btn-primary { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; }
-        .btn-secondary { background: rgba(255, 255, 255, 0.2); color: white; }
-        .btn-danger { background: rgba(239, 68, 68, 0.8); color: white; }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        .btn:hover { 
+            transform: translateY(-3px) scale(1.05); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+        .btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); 
+            color: white;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+        }
+        .btn-secondary { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
+        .btn-danger { 
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%); 
+            color: white;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+        }
+        .btn-danger:hover {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 1) 0%, rgba(220, 38, 38, 1) 100%);
+        }
         .orders-list { display: grid; gap: 1rem; }
         .order-card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             padding: 1.25rem;
             border-radius: 0.75rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
-        .order-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+        .order-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: left 0.6s;
+        }
+        .order-card:hover::before {
+            left: 100%;
+        }
+        .order-card:hover { 
+            transform: translateY(-5px) scale(1.01); 
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.5);
+        }
         .order-header { display: flex; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap; align-items: center; }
         .order-number { color: white; font-size: 1.5rem; font-weight: bold; }
         .status-badge {
@@ -93,12 +264,38 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
         }
-        .status-aberta { background: rgba(156,163,175,0.3); color: #d1d5db; }
-        .status-andamento { background: rgba(59,130,246,0.3); color: #93c5fd; }
-        .status-pausada { background: rgba(251,191,36,0.3); color: #fde047; }
-        .status-concluida { background: rgba(16,185,129,0.3); color: #6ee7b7; }
-        .status-cancelada { background: rgba(239,68,68,0.3); color: #fca5a5; }
+        .status-badge:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        .status-aberta { 
+            background: linear-gradient(135deg, rgba(156,163,175,0.4), rgba(107,114,128,0.4)); 
+            color: #d1d5db;
+            box-shadow: 0 4px 10px rgba(156,163,175,0.3);
+        }
+        .status-andamento { 
+            background: linear-gradient(135deg, rgba(59,130,246,0.4), rgba(37,99,235,0.4)); 
+            color: #93c5fd;
+            box-shadow: 0 4px 10px rgba(59,130,246,0.3);
+        }
+        .status-pausada { 
+            background: linear-gradient(135deg, rgba(251,191,36,0.4), rgba(245,158,11,0.4)); 
+            color: #fde047;
+            box-shadow: 0 4px 10px rgba(251,191,36,0.3);
+        }
+        .status-concluida { 
+            background: linear-gradient(135deg, rgba(16,185,129,0.4), rgba(5,150,105,0.4)); 
+            color: #6ee7b7;
+            box-shadow: 0 4px 10px rgba(16,185,129,0.3);
+        }
+        .status-cancelada { 
+            background: linear-gradient(135deg, rgba(239,68,68,0.4), rgba(220,38,38,0.4)); 
+            color: #fca5a5;
+            box-shadow: 0 4px 10px rgba(239,68,68,0.3);
+        }
         
         /* Gráfico personalizado */
         .chart-container {
@@ -110,6 +307,11 @@
         .donut-chart {
             width: 100%;
             height: auto;
+            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
+            transition: transform 0.3s ease;
+        }
+        .donut-chart:hover {
+            transform: scale(1.05);
         }
         .chart-legend {
             display: flex;
@@ -124,11 +326,58 @@
             gap: 0.5rem;
             color: white;
             font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .legend-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
         .legend-color {
             width: 20px;
             height: 20px;
             border-radius: 4px;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            animation: slideInRight 0.5s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            max-width: 400px;
+        }
+        @keyframes slideInRight {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .toast.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #c7d2fe;
+        }
+        .empty-state svg {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1rem;
+            opacity: 0.5;
         }
     </style>
 </head>
@@ -136,110 +385,130 @@
     <div class="container">
         <div class="header">
             <h1>⚙️ Gestão de O.S</h1>
-            <p>Controle rápido e eficiente de ordens de serviço</p>
+            <p>Controle suas Ordens de Serviço de forma simples e rápida</p>
         </div>
 
         <!-- Estatísticas -->
         <div class="stats-grid">
             <div class="stat-card">
-                <p>Total de O.S</p>
+                <p>📊 Total de O.S Cadastradas</p>
                 <h2 id="totalOS">0</h2>
             </div>
             <div class="stat-card green">
-                <p>Concluídas</p>
+                <p>✅ O.S Concluídas</p>
                 <h2 id="totalConcluidas">0</h2>
             </div>
             <div class="stat-card purple">
-                <p>Hoje</p>
+                <p>📅 O.S Apontadas Hoje</p>
                 <h2 id="totalHoje">0</h2>
             </div>
         </div>
 
         <!-- Formulário -->
         <div class="card">
-            <h2 id="formTitle">➕ Nova O.S</h2>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Nº da O.S *</label>
-                    <input type="text" id="numeroOS" placeholder="Ex: OS-001" list="osRecentes" />
-                    <datalist id="osRecentes"></datalist>
+            <h2 id="formTitle">➕ Adicionar Nova O.S</h2>
+            <form onsubmit="event.preventDefault(); saveOrder();">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>📝 Número da O.S *</label>
+                        <input type="text" id="numeroOS" placeholder="Digite o número (ex: OS-001)" list="osRecentes" required />
+                        <datalist id="osRecentes"></datalist>
+                        <small style="color: #a5b4fc; font-size: 0.75rem; margin-top: 0.25rem; display: block;">
+                            💡 Dica: Se já trabalhou nesta O.S antes, os dados serão preenchidos automaticamente
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label>📅 Data do Trabalho *</label>
+                        <input type="date" id="data" required />
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label>Data *</label>
-                    <input type="date" id="data" />
+                    <label>📋 Descrição do Serviço *</label>
+                    <textarea id="descricao" placeholder="Descreva o que foi feito ou o que precisa ser feito..." required></textarea>
+                    <small style="color: #a5b4fc; font-size: 0.75rem; margin-top: 0.25rem; display: block;">
+                        💡 Explique de forma simples o que foi realizado
+                    </small>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>Descrição *</label>
-                <textarea id="descricao" placeholder="Descreva os detalhes da ordem de serviço..."></textarea>
-            </div>
-            <div class="form-grid">
-                <div class="form-group">
-                    <label>Hora Início</label>
-                    <input type="time" id="horaInicio" />
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>🕐 Hora de Início</label>
+                        <input type="time" id="horaInicio" />
+                    </div>
+                    <div class="form-group">
+                        <label>🕐 Hora de Término</label>
+                        <input type="time" id="horaFim" />
+                    </div>
+                    <div class="form-group">
+                        <label>🍽️ Descontar Almoço? (1h 25min)</label>
+                        <select id="descontarAlmoco">
+                            <option value="nao">❌ Não</option>
+                            <option value="sim">✅ Sim</option>
+                        </select>
+                        <small style="color: #a5b4fc; font-size: 0.75rem; margin-top: 0.25rem; display: block;">
+                            💡 Marque "Sim" se trabalhou durante o período do almoço
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label>📊 Status da O.S *</label>
+                        <select id="status" required>
+                            <option value="Aberta">🔵 Aberta (Nova)</option>
+                            <option value="Em Andamento">🔄 Em Andamento</option>
+                            <option value="Pausada">⏸️ Pausada</option>
+                            <option value="Concluída">✅ Concluída</option>
+                            <option value="Cancelada">❌ Cancelada</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Hora Fim</label>
-                    <input type="time" id="horaFim" />
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">
+                        💾 <span id="btnText">Salvar O.S</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btnCancel" onclick="cancelEdit()" style="display:none;">
+                        ❌ Cancelar
+                    </button>
                 </div>
-                <div class="form-group">
-                    <label>Descontar Almoço? (1h 25min)</label>
-                    <select id="descontarAlmoco">
-                        <option value="nao">Não</option>
-                        <option value="sim">Sim</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Status *</label>
-                    <select id="status">
-                        <option value="Aberta">Aberta</option>
-                        <option value="Em Andamento">Em Andamento</option>
-                        <option value="Pausada">Pausada</option>
-                        <option value="Concluída">Concluída</option>
-                        <option value="Cancelada">Cancelada</option>
-                    </select>
-                </div>
-            </div>
-            <div class="btn-group">
-                <button class="btn btn-primary" onclick="saveOrder()">
-                    💾 <span id="btnText">Salvar</span>
-                </button>
-                <button class="btn btn-secondary" id="btnCancel" onclick="cancelEdit()" style="display:none;">
-                    ❌ Cancelar
-                </button>
-            </div>
+            </form>
         </div>
 
         <!-- FILTRO POR MÊS -->
         <div class="card">
-            <h2>🔎 Filtro por Mês</h2>
+            <h2>🔎 Buscar O.S por Mês</h2>
+            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
+                💡 Selecione um mês para ver todas as O.S daquele período
+            </p>
             <div class="form-grid">
                 <div class="form-group">
-                    <label>Filtrar por Mês</label>
+                    <label>📅 Escolha o Mês</label>
                     <input type="month" id="filtroMes" />
                 </div>
                 <div class="form-group">
                     <label>&nbsp;</label>
-                    <button class="btn btn-primary" onclick="filtrarMes()">🔍 Buscar</button>
+                    <button class="btn btn-primary" onclick="filtrarMes()">🔍 Buscar O.S</button>
                 </div>
             </div>
             <div class="btn-group" style="margin-top: 1rem;">
-                <button class="btn btn-secondary" onclick="baixarRelatorioMes()">📄 Baixar Relatório do Mês (PDF)</button>
-                <button class="btn btn-secondary" onclick="baixarRelatorioSemana()">📄 Baixar Relatório da Semana (PDF)</button>
+                <button class="btn btn-secondary" onclick="baixarRelatorioMes()">📄 Baixar Relatório do Mês</button>
+                <button class="btn btn-secondary" onclick="baixarRelatorioSemana()">📄 Baixar Relatório da Semana</button>
             </div>
         </div>
 
         <!-- Dias sem O.S -->
         <div class="card">
-            <h2>📅 Dias sem O.S</h2>
+            <h2>📅 Dias sem Trabalho no Mês</h2>
+            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
+                💡 Aqui você vê os dias do mês que não tiveram nenhuma O.S registrada
+            </p>
             <div id="diasSemOs" style="color:#c7d2fe; font-size: 0.9rem;">
-                <p style="text-align: center; padding: 1rem;">Selecione um mês para visualizar</p>
+                <p style="text-align: center; padding: 1rem;">📌 Selecione um mês acima para visualizar</p>
             </div>
         </div>
 
         <!-- Gráfico -->
         <div class="card">
-            <h2>📊 Gráfico de Apontamento (%)</h2>
+            <h2>📊 Gráfico de Aproveitamento do Mês</h2>
+            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
+                💡 Mostra quantos dias do mês tiveram trabalho registrado
+            </p>
             <div class="chart-container">
                 <svg class="donut-chart" viewBox="0 0 200 200" id="graficoApontamento">
                     <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="40" stroke-dasharray="0 502.4" transform="rotate(-90 100 100)" id="circleCom"/>
@@ -249,11 +518,11 @@
                 <div class="chart-legend">
                     <div class="legend-item">
                         <div class="legend-color" style="background: #10b981;"></div>
-                        <span>Dias com OS</span>
+                        <span>✅ Dias com trabalho</span>
                     </div>
                     <div class="legend-item">
                         <div class="legend-color" style="background: #ef4444;"></div>
-                        <span>Dias sem OS</span>
+                        <span>❌ Dias sem trabalho</span>
                     </div>
                 </div>
             </div>
@@ -261,7 +530,10 @@
 
         <!-- Lista -->
         <div class="card">
-            <h2>📋 Ordens Cadastradas (<span id="orderCount">0</span>)</h2>
+            <h2>📋 Suas Ordens de Serviço (<span id="orderCount">0</span>)</h2>
+            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
+                💡 Aqui ficam todas as suas O.S. Clique para editar ✏️ ou excluir 🗑️
+            </p>
             <div class="orders-list" id="ordersList"></div>
         </div>
     </div>
@@ -279,11 +551,28 @@
                 } catch (e) {
                     console.error('Erro ao carregar ordens:', e);
                     orders = [];
+                    showToast('❌ Erro ao carregar dados', 'error');
                 }
             }
             renderOrders();
             updateStats();
             atualizarListaOSRecentes();
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span style="font-size: 1.5rem;">${type === 'success' ? '✅' : '❌'}</span>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.5s ease reverse';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
         }
 
         // Atualiza lista de O.S recentes para autocompletar
@@ -342,7 +631,7 @@
             const almoco = document.getElementById('descontarAlmoco').value;
 
             if (!numOS || !desc || !dt) {
-                alert('⚠️ Preencha os campos obrigatórios (Nº OS, Descrição e Data)');
+                showToast('⚠️ Preencha todos os campos obrigatórios', 'error');
                 return;
             }
 
@@ -361,9 +650,11 @@
                 const index = orders.findIndex(o => o.id === editingId);
                 if (index !== -1) {
                     orders[index] = order;
+                    showToast('✅ O.S atualizada com sucesso!');
                 }
             } else {
                 orders.push(order);
+                showToast('✅ O.S cadastrada com sucesso!');
             }
 
             saveToStorage();
@@ -388,18 +679,19 @@
 
             editingId = id;
             document.getElementById('formTitle').textContent = '✏️ Editar O.S';
-            document.getElementById('btnText').textContent = 'Atualizar';
+            document.getElementById('btnText').textContent = 'Atualizar O.S';
             document.getElementById('btnCancel').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Exclui uma ordem
         function deleteOrder(id) {
-            if (confirm('🗑️ Deseja realmente excluir esta O.S?')) {
+            if (confirm('🗑️ Tem certeza que deseja excluir este apontamento?')) {
                 orders = orders.filter(o => o.id !== id);
                 saveToStorage();
                 renderOrders();
                 updateStats();
+                showToast('✅ Apontamento excluído com sucesso!');
             }
         }
 
@@ -418,8 +710,8 @@
             document.getElementById('status').value = 'Aberta';
             document.getElementById('descontarAlmoco').value = 'nao';
             editingId = null;
-            document.getElementById('formTitle').textContent = '➕ Nova O.S';
-            document.getElementById('btnText').textContent = 'Salvar';
+            document.getElementById('formTitle').textContent = '➕ Adicionar Nova O.S';
+            document.getElementById('btnText').textContent = 'Salvar O.S';
             document.getElementById('btnCancel').style.display = 'none';
             
             // Define data de hoje novamente
@@ -444,7 +736,13 @@
             document.getElementById('orderCount').textContent = osUnicas.length;
 
             if (osUnicas.length === 0) {
-                cont.innerHTML = '<div style="color:#c7d2fe; text-align:center; padding:2rem;">Nenhuma ordem cadastrada</div>';
+                cont.innerHTML = `
+                    <div class="empty-state">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">Nenhuma O.S cadastrada ainda</h3>
+                        <p>Comece adicionando sua primeira Ordem de Serviço acima! ⬆️</p>
+                    </div>
+                `;
                 return;
             }
 
@@ -490,7 +788,7 @@
                     `;
                 }).join('');
 
-                return `<div class='order-card'>
+                return `<div class='order-card' style='animation: slideIn 0.4s ease;'>
                     <div class='order-header'>
                         <span class='order-number'>${numeroOS}</span>
                         <span class='status-badge ${cls}'>${status}</span>
@@ -528,7 +826,7 @@
             const mesSelecionado = document.getElementById('filtroMes').value;
             if (!mesSelecionado) {
                 renderOrders();
-                document.getElementById('diasSemOs').innerHTML = '<p style="text-align: center; padding: 1rem;">Selecione um mês para visualizar</p>';
+                document.getElementById('diasSemOs').innerHTML = '<p style="text-align: center; padding: 1rem;">📌 Selecione um mês acima para visualizar</p>';
                 atualizarGrafico(0);
                 return;
             }
@@ -625,7 +923,7 @@
         function baixarRelatorioMes() {
             const mesSelecionado = document.getElementById('filtroMes').value;
             if (!mesSelecionado) {
-                alert('⚠️ Selecione um mês para gerar o relatório');
+                showToast('⚠️ Selecione um mês primeiro', 'error');
                 return;
             }
 
@@ -635,8 +933,14 @@
                 return d.getMonth() + 1 === mes && d.getFullYear() === ano;
             });
 
+            if (ordens.length === 0) {
+                showToast('⚠️ Nenhuma O.S encontrada neste mês', 'error');
+                return;
+            }
+
             const nomeMes = new Date(ano, mes - 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
             gerarPDF(ordens, `Relatório Mensal - ${nomeMes}`, 'mes', ano, mes);
+            showToast('✅ Relatório gerado com sucesso!');
         }
 
         function baixarRelatorioSemana() {
@@ -651,8 +955,14 @@
                 return d >= inicioDaSemana && d <= fimDaSemana;
             });
 
+            if (ordens.length === 0) {
+                showToast('⚠️ Nenhuma O.S encontrada nesta semana', 'error');
+                return;
+            }
+
             const periodo = `${inicioDaSemana.toLocaleDateString('pt-BR')} a ${fimDaSemana.toLocaleDateString('pt-BR')}`;
             gerarPDF(ordens, `Relatório Semanal - ${periodo}`, 'semana');
+            showToast('✅ Relatório gerado com sucesso!');
         }
 
         function gerarPDF(ordens, titulo, tipo, ano, mes) {
