@@ -11,169 +11,42 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #0a0e27 0%, #1a1042 25%, #2d1b69 50%, #1a1042 75%, #0a0e27 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1042 50%, #0a0e27 100%);
             min-height: 100vh;
             padding: 1rem;
-            position: relative;
-            overflow-x: hidden;
         }
         
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        /* Partículas animadas */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(2px 2px at 60% 70%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1px 1px at 50% 50%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(2px 2px at 90% 60%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1px 1px at 33% 50%, rgba(255,255,255,0.3), transparent),
-                radial-gradient(1px 1px at 66% 33%, rgba(255,255,255,0.3), transparent);
-            background-size: 200% 200%;
-            background-position: 0% 0%;
-            animation: moveStars 60s linear infinite;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.5;
-        }
-        
-        @keyframes moveStars {
-            0% { background-position: 0% 0%; }
-            100% { background-position: 100% 100%; }
-        }
-        
-        .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
-        .header { text-align: center; margin-bottom: 2rem; animation: slideIn 0.6s ease; }
-        .header h1 { 
-            color: white; 
-            font-size: 2.5rem; 
-            font-weight: bold; 
-            margin-bottom: 0.5rem;
-            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5), 0 0 40px rgba(99, 102, 241, 0.3);
-            animation: pulse 3s ease-in-out infinite;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .header h1 { color: white; font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem; }
         .header p { color: #c7d2fe; font-size: 1rem; }
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
-            gap: 1rem; 
-            margin-bottom: 2rem;
-        }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
         .stat-card {
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3) 0%, rgba(37, 99, 235, 0.3) 100%);
-            backdrop-filter: blur(20px);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(37, 99, 235, 0.3));
             border-radius: 1rem;
             padding: 1.5rem;
             color: white;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(59, 130, 246, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(99, 102, 241, 0.3);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: slideIn 0.6s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            transition: all 0.6s;
-        }
-        .stat-card:hover::before {
-            left: 100%;
-        }
-        .stat-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(59, 130, 246, 0.4);
-            border-color: rgba(99, 102, 241, 0.6);
         }
         .stat-card p { font-size: 0.875rem; opacity: 0.9; margin-bottom: 0.5rem; }
         .stat-card h2 { font-size: 2.5rem; font-weight: bold; }
-        .stat-card.green { 
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(5, 150, 105, 0.3) 100%);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(16, 185, 129, 0.2);
-        }
-        .stat-card.green:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(16, 185, 129, 0.4);
-        }
-        .stat-card.purple { 
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(124, 58, 237, 0.3) 100%);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(139, 92, 246, 0.2);
-        }
-        .stat-card.purple:hover {
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 40px rgba(139, 92, 246, 0.4);
-        }
+        .stat-card.green { background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(5, 150, 105, 0.3)); }
+        .stat-card.purple { background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(124, 58, 237, 0.3)); }
+        
         .card {
             background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
             border-radius: 1rem;
             padding: 1.5rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
             margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.8s ease;
-            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
         }
-        .card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.2);
-        }
-        .card h2 { 
-            color: white; 
-            font-size: 1.5rem; 
-            margin-bottom: 1.5rem; 
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
-        }
+        .card h2 { color: white; font-size: 1.5rem; margin-bottom: 1.5rem; font-weight: bold; }
+        
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
         .form-group { display: flex; flex-direction: column; }
         .form-group label { color: #c7d2fe; font-size: 0.875rem; margin-bottom: 0.5rem; font-weight: 500; }
@@ -184,16 +57,9 @@
             padding: 0.75rem 1rem;
             color: white;
             font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: #6366f1;
-            background: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4), 0 0 40px rgba(99, 102, 241, 0.2);
-            transform: scale(1.02);
         }
         .form-group textarea { min-height: 100px; resize: vertical; font-family: inherit; }
+        
         .btn-group { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
         .btn {
             padding: 0.75rem 1.5rem;
@@ -205,85 +71,17 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
         }
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        .btn:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-        .btn:hover { 
-            transform: translateY(-3px) scale(1.05); 
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(99, 102, 241, 0.5);
-        }
-        .btn:active {
-            transform: translateY(-1px) scale(1.02);
-        }
-        .btn-primary { 
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); 
-            color: white;
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
-        }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
-        }
-        .btn-secondary { 
-            background: rgba(255, 255, 255, 0.1); 
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(99, 102, 241, 0.5);
-        }
-        .btn-danger { 
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.8) 0%, rgba(220, 38, 38, 0.8) 100%); 
-            color: white;
-            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
-        }
-        .btn-danger:hover {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 1) 0%, rgba(220, 38, 38, 1) 100%);
-        }
+        .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
+        .btn-secondary { background: rgba(255, 255, 255, 0.2); color: white; }
+        .btn-danger { background: rgba(239, 68, 68, 0.8); color: white; }
+        
         .orders-list { display: grid; gap: 1rem; }
         .order-card {
             background: rgba(255, 255, 255, 0.05);
             padding: 1.25rem;
             border-radius: 0.75rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-        }
-        .order-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: left 0.6s;
-        }
-        .order-card:hover::before {
-            left: 100%;
-        }
-        .order-card:hover { 
-            transform: translateY(-5px) scale(1.01); 
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(99, 102, 241, 0.3);
-            border-color: rgba(99, 102, 241, 0.5);
         }
         .order-header { display: flex; gap: 1rem; margin-bottom: 0.75rem; flex-wrap: wrap; align-items: center; }
         .order-number { color: white; font-size: 1.5rem; font-weight: bold; }
@@ -293,85 +91,13 @@
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
         }
-        .status-badge:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-        }
-        .status-aberta { 
-            background: linear-gradient(135deg, rgba(156,163,175,0.4), rgba(107,114,128,0.4)); 
-            color: #d1d5db;
-            box-shadow: 0 4px 10px rgba(156,163,175,0.3);
-        }
-        .status-andamento { 
-            background: linear-gradient(135deg, rgba(59,130,246,0.4), rgba(37,99,235,0.4)); 
-            color: #93c5fd;
-            box-shadow: 0 4px 10px rgba(59,130,246,0.3);
-        }
-        .status-pausada { 
-            background: linear-gradient(135deg, rgba(251,191,36,0.4), rgba(245,158,11,0.4)); 
-            color: #fde047;
-            box-shadow: 0 4px 10px rgba(251,191,36,0.3);
-        }
-        .status-concluida { 
-            background: linear-gradient(135deg, rgba(16,185,129,0.4), rgba(5,150,105,0.4)); 
-            color: #6ee7b7;
-            box-shadow: 0 4px 10px rgba(16,185,129,0.3);
-        }
-        .status-cancelada { 
-            background: linear-gradient(135deg, rgba(239,68,68,0.4), rgba(220,38,38,0.4)); 
-            color: #fca5a5;
-            box-shadow: 0 4px 10px rgba(239,68,68,0.3);
-        }
+        .status-aberta { background: rgba(156,163,175,0.3); color: #d1d5db; }
+        .status-andamento { background: rgba(59,130,246,0.3); color: #93c5fd; }
+        .status-pausada { background: rgba(251,191,36,0.3); color: #fde047; }
+        .status-concluida { background: rgba(16,185,129,0.3); color: #6ee7b7; }
+        .status-cancelada { background: rgba(239,68,68,0.3); color: #fca5a5; }
         
-        /* Gráfico personalizado */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-        .donut-chart {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
-            transition: transform 0.3s ease;
-        }
-        .donut-chart:hover {
-            transform: scale(1.05);
-        }
-        .chart-legend {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: white;
-            font-size: 0.9rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 0.5rem;
-            transition: all 0.3s ease;
-        }
-        .legend-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-        .legend-color {
-            width: 20px;
-            height: 20px;
-            border-radius: 4px;
-            box-shadow: 0 0 10px currentColor;
-        }
-        
-        /* Toast notification */
         .toast {
             position: fixed;
             top: 20px;
@@ -382,32 +108,11 @@
             border-radius: 0.75rem;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             z-index: 9999;
-            animation: slideInRight 0.5s ease;
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            max-width: 400px;
         }
-        @keyframes slideInRight {
-            from { transform: translateX(400px); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        .toast.error {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-        }
-        
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #c7d2fe;
-        }
-        .empty-state svg {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
+        .toast.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
     </style>
 </head>
 <body>
@@ -420,15 +125,15 @@
         <!-- Estatísticas -->
         <div class="stats-grid">
             <div class="stat-card">
-                <p>📊 Total de O.S Cadastradas</p>
+                <p>📊 Total de O.S</p>
                 <h2 id="totalOS">0</h2>
             </div>
             <div class="stat-card green">
-                <p>✅ O.S Concluídas</p>
+                <p>✅ Concluídas</p>
                 <h2 id="totalConcluidas">0</h2>
             </div>
             <div class="stat-card purple">
-                <p>📅 O.S Apontadas Hoje</p>
+                <p>📅 Hoje</p>
                 <h2 id="totalHoje">0</h2>
             </div>
         </div>
@@ -440,31 +145,25 @@
                 <div class="form-grid">
                     <div class="form-group">
                         <label>📝 Número da O.S *</label>
-                        <input type="text" id="numeroOS" placeholder="Digite o número (ex: OS-001)" list="osRecentes" required />
+                        <input type="text" id="numeroOS" placeholder="Ex: OS-001" list="osRecentes" required />
                         <datalist id="osRecentes"></datalist>
-                        <small style="color: #a5b4fc; font-size: 0.75rem; margin-top: 0.25rem; display: block;">
-                            💡 Dica: Se já trabalhou nesta O.S antes, os dados serão preenchidos automaticamente
-                        </small>
                     </div>
                     <div class="form-group">
-                        <label>📅 Data do Trabalho *</label>
+                        <label>📅 Data *</label>
                         <input type="date" id="data" required />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label>📋 Descrição do Serviço *</label>
-                    <textarea id="descricao" placeholder="Descreva o que foi feito ou o que precisa ser feito..." required></textarea>
-                    <small style="color: #a5b4fc; font-size: 0.75rem; margin-top: 0.25rem; display: block;">
-                        💡 Explique de forma simples o que foi realizado
-                    </small>
+                    <label>📋 Descrição *</label>
+                    <textarea id="descricao" placeholder="Descreva o serviço..." required></textarea>
                 </div>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>🕐 Hora de Início</label>
+                        <label>🕐 Hora Início</label>
                         <input type="time" id="horaInicio" />
                     </div>
                     <div class="form-group">
-                        <label>🕐 Hora de Término</label>
+                        <label>🕐 Hora Fim</label>
                         <input type="time" id="horaFim" />
                     </div>
                     <div class="form-group">
@@ -473,14 +172,11 @@
                             <option value="nao">❌ Não</option>
                             <option value="sim">✅ Sim</option>
                         </select>
-                        <small style="color: #a5b4fc; font-size: 0.75rem; margin-top: 0.25rem; display: block;">
-                            💡 Marque "Sim" se trabalhou durante o período do almoço
-                        </small>
                     </div>
                     <div class="form-group">
-                        <label>📊 Status da O.S *</label>
+                        <label>📊 Status *</label>
                         <select id="status" required>
-                            <option value="Aberta">🔵 Aberta (Nova)</option>
+                            <option value="Aberta">🔵 Aberta</option>
                             <option value="Em Andamento">🔄 Em Andamento</option>
                             <option value="Pausada">⏸️ Pausada</option>
                             <option value="Concluída">✅ Concluída</option>
@@ -502,67 +198,32 @@
         <!-- FILTRO POR MÊS -->
         <div class="card">
             <h2>🔎 Buscar O.S por Mês</h2>
-            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
-                💡 Selecione um mês para ver todas as O.S daquele período
-            </p>
             <div class="form-grid">
                 <div class="form-group">
-                    <label>📅 Escolha o Mês</label>
+                    <label>📅 Mês</label>
                     <input type="month" id="filtroMes" />
                 </div>
                 <div class="form-group">
                     <label>&nbsp;</label>
-                    <button class="btn btn-primary" onclick="filtrarMes()">🔍 Buscar O.S</button>
+                    <button class="btn btn-primary" onclick="filtrarMes()">🔍 Buscar</button>
                 </div>
             </div>
             <div class="btn-group" style="margin-top: 1rem;">
-                <button class="btn btn-secondary" onclick="baixarRelatorioMes()">📄 Baixar Relatório do Mês</button>
-                <button class="btn btn-secondary" onclick="baixarRelatorioSemana()">📄 Baixar Relatório da Semana</button>
-            </div>
-        </div>
-
-        <!-- Dias sem O.S -->
-        <div class="card">
-            <h2>📅 Dias sem Trabalho no Mês</h2>
-            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
-                💡 Aqui você vê os dias do mês que não tiveram nenhuma O.S registrada
-            </p>
-            <div id="diasSemOs" style="color:#c7d2fe; font-size: 0.9rem;">
-                <p style="text-align: center; padding: 1rem;">📌 Selecione um mês acima para visualizar</p>
-            </div>
-        </div>
-
-        <!-- Gráfico -->
-        <div class="card">
-            <h2>📊 Gráfico de Aproveitamento do Mês</h2>
-            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
-                💡 Mostra quantos dias do mês tiveram trabalho registrado
-            </p>
-            <div class="chart-container">
-                <svg class="donut-chart" viewBox="0 0 200 200" id="graficoApontamento">
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="#10b981" stroke-width="40" stroke-dasharray="0 502.4" transform="rotate(-90 100 100)" id="circleCom"/>
-                    <circle cx="100" cy="100" r="80" fill="none" stroke="#ef4444" stroke-width="40" stroke-dasharray="502.4 502.4" transform="rotate(-90 100 100)" id="circleSem"/>
-                    <text x="100" y="100" text-anchor="middle" dy="0.3em" fill="white" font-size="32" font-weight="bold" id="percentText">0%</text>
-                </svg>
-                <div class="chart-legend">
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #10b981;"></div>
-                        <span>✅ Dias com trabalho</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color" style="background: #ef4444;"></div>
-                        <span>❌ Dias sem trabalho</span>
-                    </div>
-                </div>
+                <button class="btn btn-secondary" onclick="baixarRelatorioMes()">📄 Relatório do Mês</button>
+                <button class="btn btn-secondary" onclick="baixarRelatorioSemana()">📄 Relatório da Semana</button>
             </div>
         </div>
 
         <!-- Lista -->
         <div class="card">
-            <h2>📋 Suas Ordens de Serviço (<span id="orderCount">0</span>)</h2>
-            <p style="color: #c7d2fe; margin-bottom: 1rem; font-size: 0.9rem;">
-                💡 Aqui ficam todas as suas O.S. Clique para editar ✏️ ou excluir 🗑️
-            </p>
+            <h2>📋 Suas O.S (<span id="orderCount">0</span>)</h2>
+            <input 
+                type="text" 
+                id="searchBox" 
+                placeholder="🔍 Buscar..." 
+                style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 0.75rem; padding: 0.75rem 1rem; color: white; margin-bottom: 1rem;"
+                oninput="buscarOS(this.value)"
+            />
             <div class="orders-list" id="ordersList"></div>
         </div>
     </div>
@@ -571,16 +232,13 @@
         let orders = [];
         let editingId = null;
 
-        // Carrega as ordens do localStorage
         function loadOrders() {
             const saved = localStorage.getItem('ordens-servico');
             if (saved) {
                 try {
                     orders = JSON.parse(saved);
                 } catch (e) {
-                    console.error('Erro ao carregar ordens:', e);
                     orders = [];
-                    showToast('❌ Erro ao carregar dados', 'error');
                 }
             }
             renderOrders();
@@ -588,68 +246,29 @@
             atualizarListaOSRecentes();
         }
 
-        // Toast notification
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            toast.innerHTML = `
-                <span style="font-size: 1.5rem;">${type === 'success' ? '✅' : '❌'}</span>
-                <span>${message}</span>
-            `;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'slideInRight 0.5s ease reverse';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
-        }
-
-        // Atualiza lista de O.S recentes para autocompletar
-        function atualizarListaOSRecentes() {
-            const numerosUnicos = [...new Set(orders.map(o => o.numeroOS))];
-            const datalist = document.getElementById('osRecentes');
-            datalist.innerHTML = numerosUnicos.map(num => `<option value="${num}">`).join('');
-        }
-
-        // Ao selecionar uma O.S existente, preencher dados anteriores
-        document.getElementById('numeroOS').addEventListener('input', function() {
-            const numeroDigitado = this.value.trim();
-            if (!numeroDigitado) return;
-
-            const osExistente = orders.filter(o => o.numeroOS === numeroDigitado)
-                .sort((a, b) => new Date(b.data) - new Date(a.data))[0];
-
-            if (osExistente && !editingId) {
-                document.getElementById('descricao').value = osExistente.descricao;
-                document.getElementById('status').value = osExistente.status;
-            }
-        });
-
-        // Salva no localStorage
         function saveToStorage() {
             localStorage.setItem('ordens-servico', JSON.stringify(orders));
         }
 
-        // Calcula duração entre dois horários
         function calculateDuration(inicio, fim, descontarAlmoco) {
             if (!inicio || !fim) return '-';
             const [h1, m1] = inicio.split(':').map(Number);
             const [h2, m2] = fim.split(':').map(Number);
             let total = (h2 * 60 + m2) - (h1 * 60 + m1);
             if (total < 0) return '-';
-            
-            // Desconta 1h 25min (85 minutos) se solicitado
-            if (descontarAlmoco === 'sim') {
-                total = total - 85;
-                if (total < 0) total = 0;
-            }
-            
-            const horas = Math.floor(total / 60);
-            const minutos = total % 60;
-            return `${horas}h ${minutos}m`;
+            if (descontarAlmoco === 'sim') total -= 85;
+            if (total < 0) total = 0;
+            return `${Math.floor(total / 60)}h ${total % 60}m`;
         }
 
-        // Salva ou atualiza uma ordem
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${type === 'success' ? '✅' : '❌'}</span><span>${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
         function saveOrder() {
             const numOS = document.getElementById('numeroOS').value.trim();
             const desc = document.getElementById('descricao').value.trim();
@@ -660,7 +279,7 @@
             const almoco = document.getElementById('descontarAlmoco').value;
 
             if (!numOS || !desc || !dt) {
-                showToast('⚠️ Preencha todos os campos obrigatórios', 'error');
+                showToast('Preencha todos os campos obrigatórios', 'error');
                 return;
             }
 
@@ -676,14 +295,11 @@
             };
 
             if (editingId) {
-                const index = orders.findIndex(o => o.id === editingId);
-                if (index !== -1) {
-                    orders[index] = order;
-                    showToast('✅ O.S atualizada com sucesso!');
-                }
+                orders[orders.findIndex(o => o.id === editingId)] = order;
+                showToast('O.S atualizada!');
             } else {
                 orders.push(order);
-                showToast('✅ O.S cadastrada com sucesso!');
+                showToast('O.S cadastrada!');
             }
 
             saveToStorage();
@@ -693,11 +309,9 @@
             clearForm();
         }
 
-        // Edita uma ordem existente
         function editOrder(id) {
             const o = orders.find(o => o.id === id);
             if (!o) return;
-
             document.getElementById('numeroOS').value = o.numeroOS;
             document.getElementById('descricao').value = o.descricao;
             document.getElementById('data').value = o.data;
@@ -705,31 +319,27 @@
             document.getElementById('horaFim').value = o.horaFim || '';
             document.getElementById('status').value = o.status;
             document.getElementById('descontarAlmoco').value = o.descontarAlmoco || 'nao';
-
             editingId = id;
             document.getElementById('formTitle').textContent = '✏️ Editar O.S';
-            document.getElementById('btnText').textContent = 'Atualizar O.S';
+            document.getElementById('btnText').textContent = 'Atualizar';
             document.getElementById('btnCancel').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Exclui uma ordem
         function deleteOrder(id) {
-            if (confirm('🗑️ Tem certeza que deseja excluir este apontamento?')) {
+            if (confirm('Excluir este apontamento?')) {
                 orders = orders.filter(o => o.id !== id);
                 saveToStorage();
                 renderOrders();
                 updateStats();
-                showToast('✅ Apontamento excluído com sucesso!');
+                showToast('Apontamento excluído!');
             }
         }
 
-        // Cancela edição
         function cancelEdit() {
             clearForm();
         }
 
-        // Limpa o formulário
         function clearForm() {
             document.getElementById('numeroOS').value = '';
             document.getElementById('descricao').value = '';
@@ -742,22 +352,29 @@
             document.getElementById('formTitle').textContent = '➕ Adicionar Nova O.S';
             document.getElementById('btnText').textContent = 'Salvar O.S';
             document.getElementById('btnCancel').style.display = 'none';
-            
-            // Define data de hoje novamente
-            const hoje = new Date();
-            document.getElementById('data').valueAsDate = hoje;
+            document.getElementById('data').valueAsDate = new Date();
         }
 
-        // Renderiza a lista de ordens AGRUPADAS por número
+        function atualizarListaOSRecentes() {
+            const numerosUnicos = [...new Set(orders.map(o => o.numeroOS))];
+            document.getElementById('osRecentes').innerHTML = numerosUnicos.map(num => `<option value="${num}">`).join('');
+        }
+
+        document.getElementById('numeroOS').addEventListener('input', function() {
+            const numeroDigitado = this.value.trim();
+            if (!numeroDigitado || editingId) return;
+            const osExistente = orders.filter(o => o.numeroOS === numeroDigitado).sort((a, b) => new Date(b.data) - new Date(a.data))[0];
+            if (osExistente) {
+                document.getElementById('descricao').value = osExistente.descricao;
+                document.getElementById('status').value = osExistente.status;
+            }
+        });
+
         function renderOrders(lista = orders) {
             const cont = document.getElementById('ordersList');
-            
-            // Agrupa por número de O.S
             const ordensAgrupadas = {};
             lista.forEach(order => {
-                if (!ordensAgrupadas[order.numeroOS]) {
-                    ordensAgrupadas[order.numeroOS] = [];
-                }
+                if (!ordensAgrupadas[order.numeroOS]) ordensAgrupadas[order.numeroOS] = [];
                 ordensAgrupadas[order.numeroOS].push(order);
             });
 
@@ -765,26 +382,15 @@
             document.getElementById('orderCount').textContent = osUnicas.length;
 
             if (osUnicas.length === 0) {
-                cont.innerHTML = `
-                    <div class="empty-state">
-                        <div style="font-size: 4rem; margin-bottom: 1rem;">📋</div>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">Nenhuma O.S cadastrada ainda</h3>
-                        <p>Comece adicionando sua primeira Ordem de Serviço acima! ⬆️</p>
-                    </div>
-                `;
+                cont.innerHTML = '<div style="color:#c7d2fe; text-align:center; padding:2rem;">Nenhuma O.S cadastrada</div>';
                 return;
             }
 
             cont.innerHTML = osUnicas.map(numeroOS => {
                 const apontamentos = ordensAgrupadas[numeroOS];
-                
-                // Ordena por data (mais recente primeiro)
                 apontamentos.sort((a, b) => new Date(b.data) - new Date(a.data));
-                
-                // Pega o status mais recente
                 const ultimoApontamento = apontamentos[0];
                 const status = ultimoApontamento.status;
-                
                 const cls = {
                     'Aberta': 'status-aberta',
                     'Em Andamento': 'status-andamento',
@@ -793,20 +399,14 @@
                     'Cancelada': 'status-cancelada'
                 }[status] || 'status-aberta';
 
-                // Lista de apontamentos
                 const listaApontamentos = apontamentos.map(apt => {
                     const dataFormatada = new Date(apt.data + 'T00:00:00').toLocaleDateString('pt-BR');
-                    const duracao = apt.horaInicio && apt.horaFim ? 
-                        calculateDuration(apt.horaInicio, apt.horaFim, apt.descontarAlmoco || 'nao') : '-';
-                    
+                    const duracao = apt.horaInicio && apt.horaFim ? calculateDuration(apt.horaInicio, apt.horaFim, apt.descontarAlmoco || 'nao') : '-';
                     return `
                         <div style="background: rgba(255,255,255,0.05); padding: 0.75rem; border-radius: 0.5rem; margin-top: 0.5rem; border-left: 3px solid #6366f1;">
                             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
                                 <div style="color:#c7d2fe; font-size:0.85rem;">
-                                    📅 ${dataFormatada}
-                                    ${apt.horaInicio ? ' | 🕐 ' + apt.horaInicio + ' - ' + (apt.horaFim || '...') : ''}
-                                    ${apt.horaInicio && apt.horaFim ? ' | ⏱ ' + duracao : ''}
-                                    ${apt.descontarAlmoco === 'sim' ? ' <span style="color: #fde047;">(🍽️ -1h25min)</span>' : ''}
+                                    📅 ${dataFormatada} ${apt.horaInicio ? '| 🕐 ' + apt.horaInicio + ' - ' + (apt.horaFim || '...') : ''} ${apt.horaInicio && apt.horaFim ? '| ⏱ ' + duracao : ''} ${apt.descontarAlmoco === 'sim' ? '<span style="color: #fde047;">(🍽️ -1h25min)</span>' : ''}
                                 </div>
                                 <div style="display: flex; gap: 0.5rem;">
                                     <button class='btn btn-secondary' style='padding:0.25rem 0.75rem; font-size: 0.8rem;' onclick='editOrder(${apt.id})'>✏️</button>
@@ -817,7 +417,7 @@
                     `;
                 }).join('');
 
-                return `<div class='order-card' style='animation: slideIn 0.4s ease;'>
+                return `<div class='order-card'>
                     <div class='order-header'>
                         <span class='order-number'>${numeroOS}</span>
                         <span class='status-badge ${cls}'>${status}</span>
@@ -831,373 +431,121 @@
             }).join('');
         }
 
-        // Atualiza as estatísticas
         function updateStats() {
-            // Conta O.S únicas (mesmo número = 1 O.S)
             const osUnicas = [...new Set(orders.map(o => o.numeroOS))];
             document.getElementById('totalOS').textContent = osUnicas.length;
             
-            // Para concluídas, conta se TODAS as entradas daquela O.S estão concluídas
             const osConcluidas = osUnicas.filter(numOS => {
-                const entradasDaOS = orders.filter(o => o.numeroOS === numOS);
-                return entradasDaOS.every(o => o.status === 'Concluída');
+                const entradas = orders.filter(o => o.numeroOS === numOS);
+                entradas.sort((a, b) => new Date(b.data) - new Date(a.data));
+                return entradas[0].status === 'Concluída';
             });
             document.getElementById('totalConcluidas').textContent = osConcluidas.length;
             
             const hoje = new Date().toISOString().split('T')[0];
-            // Para hoje, conta O.S únicas que tiveram apontamento hoje
             const osHoje = [...new Set(orders.filter(o => o.data === hoje).map(o => o.numeroOS))];
             document.getElementById('totalHoje').textContent = osHoje.length;
         }
 
-        // FILTRO POR MÊS
         function filtrarMes() {
-            const mesSelecionado = document.getElementById('filtroMes').value;
-            if (!mesSelecionado) {
-                renderOrders();
-                document.getElementById('diasSemOs').innerHTML = '<p style="text-align: center; padding: 1rem;">📌 Selecione um mês acima para visualizar</p>';
-                atualizarGrafico(0);
-                return;
-            }
-
-            const [ano, mes] = mesSelecionado.split('-').map(Number);
-
+            const mes = document.getElementById('filtroMes').value;
+            if (!mes) { renderOrders(); return; }
+            const [ano, mesNum] = mes.split('-').map(Number);
             const filtradas = orders.filter(o => {
                 const d = new Date(o.data + 'T00:00:00');
-                return d.getMonth() + 1 === mes && d.getFullYear() === ano;
+                return d.getMonth() + 1 === mesNum && d.getFullYear() === ano;
             });
-
             renderOrders(filtradas);
-            mostrarDiasSemOS(ano, mes);
-            atualizarGrafico(ano, mes);
         }
 
-        // DIAS SEM OS
-        function diasSemApontamento(ano, mes) {
-            const diasNoMes = new Date(ano, mes, 0).getDate();
-            const diasEncontrados = orders
-                .filter(o => {
-                    const d = new Date(o.data + 'T00:00:00');
-                    return d.getMonth() + 1 === mes && d.getFullYear() === ano;
-                })
-                .map(o => {
-                    const dia = Number(o.data.split('-')[2]);
-                    return dia;
-                });
-
-            const sem = [];
-            for (let dia = 1; dia <= diasNoMes; dia++) {
-                if (!diasEncontrados.includes(dia)) {
-                    sem.push(dia);
-                }
-            }
-            return sem;
+        function buscarOS(termo) {
+            if (!termo.trim()) { renderOrders(); return; }
+            const termoLower = termo.toLowerCase();
+            const filtradas = orders.filter(o => 
+                o.numeroOS.toLowerCase().includes(termoLower) ||
+                o.descricao.toLowerCase().includes(termoLower)
+            );
+            renderOrders(filtradas);
         }
 
-        function mostrarDiasSemOS(ano, mes) {
-            const lista = diasSemApontamento(ano, mes);
-            const elemento = document.getElementById('diasSemOs');
-
-            if (lista.length === 0) {
-                elemento.innerHTML = '<p style="text-align: center; padding: 1rem; color: #6ee7b7;">✅ Todos os dias possuem O.S</p>';
-            } else {
-                const diasFormatados = lista.map(d => d.toString().padStart(2, '0')).join(', ');
-                elemento.innerHTML = `
-                    <div style="background: rgba(239,68,68,0.2); padding: 1rem; border-radius: 0.5rem; border-left: 4px solid #ef4444;">
-                        <p style="margin-bottom: 0.5rem; font-weight: 600;">
-                            <span style="color: #fca5a5;">⚠️ ${lista.length} dia(s) sem apontamento</span>
-                        </p>
-                        <p style="color: #c7d2fe; font-size: 0.85rem;">Dias: ${diasFormatados}</p>
-                    </div>
-                `;
-            }
-        }
-
-        // GRÁFICO SVG (100% Offline)
-        function atualizarGrafico(ano, mes) {
-            if (!ano || !mes) {
-                document.getElementById('percentText').textContent = '0%';
-                document.getElementById('circleCom').setAttribute('stroke-dasharray', '0 502.4');
-                document.getElementById('circleSem').setAttribute('stroke-dasharray', '502.4 502.4');
-                return;
-            }
-
-            const totalDias = new Date(ano, mes, 0).getDate();
-            const diasCom = orders.filter(o => {
-                const d = new Date(o.data + 'T00:00:00');
-                return d.getFullYear() === ano && d.getMonth() + 1 === mes;
-            }).length;
-
-            const porcent = Math.round((diasCom / totalDias) * 100);
-            const circumference = 502.4; // 2 * Math.PI * 80
-            const comLength = (porcent / 100) * circumference;
-            const semLength = circumference - comLength;
-
-            document.getElementById('percentText').textContent = porcent + '%';
-            document.getElementById('circleCom').setAttribute('stroke-dasharray', `${comLength} ${circumference}`);
-            document.getElementById('circleSem').setAttribute('stroke-dasharray', `${semLength} ${circumference}`);
-            document.getElementById('circleSem').setAttribute('stroke-dashoffset', -comLength);
-        }
-
-        // Inicializa o sistema
-        loadOrders();
-
-        // Define data de hoje como padrão
-        const hoje = new Date();
-        const dataInput = document.getElementById('data');
-        dataInput.valueAsDate = hoje;
-
-        // ========== FUNÇÕES PARA GERAR PDF ==========
-        
         function baixarRelatorioMes() {
-            const mesSelecionado = document.getElementById('filtroMes').value;
-            if (!mesSelecionado) {
-                showToast('⚠️ Selecione um mês primeiro', 'error');
-                return;
-            }
-
-            const [ano, mes] = mesSelecionado.split('-').map(Number);
+            const mes = document.getElementById('filtroMes').value;
+            if (!mes) { showToast('Selecione um mês', 'error'); return; }
+            const [ano, mesNum] = mes.split('-').map(Number);
             const ordens = orders.filter(o => {
                 const d = new Date(o.data + 'T00:00:00');
-                return d.getMonth() + 1 === mes && d.getFullYear() === ano;
+                return d.getMonth() + 1 === mesNum && d.getFullYear() === ano;
             });
-
-            if (ordens.length === 0) {
-                showToast('⚠️ Nenhuma O.S encontrada neste mês', 'error');
-                return;
-            }
-
-            const nomeMes = new Date(ano, mes - 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-            gerarPDF(ordens, `Relatório Mensal - ${nomeMes}`, 'mes', ano, mes);
-            showToast('✅ Relatório gerado com sucesso!');
+            if (ordens.length === 0) { showToast('Nenhuma O.S neste mês', 'error'); return; }
+            gerarPDF(ordens, `Relatório Mensal - ${new Date(ano, mesNum - 1).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}`);
         }
 
         function baixarRelatorioSemana() {
             const hoje = new Date();
-            const inicioDaSemana = new Date(hoje);
-            inicioDaSemana.setDate(hoje.getDate() - hoje.getDay());
-            const fimDaSemana = new Date(inicioDaSemana);
-            fimDaSemana.setDate(inicioDaSemana.getDate() + 6);
-
+            const inicio = new Date(hoje);
+            inicio.setDate(hoje.getDate() - hoje.getDay());
+            const fim = new Date(inicio);
+            fim.setDate(inicio.getDate() + 6);
             const ordens = orders.filter(o => {
                 const d = new Date(o.data + 'T00:00:00');
-                return d >= inicioDaSemana && d <= fimDaSemana;
+                return d >= inicio && d <= fim;
             });
-
-            if (ordens.length === 0) {
-                showToast('⚠️ Nenhuma O.S encontrada nesta semana', 'error');
-                return;
-            }
-
-            const periodo = `${inicioDaSemana.toLocaleDateString('pt-BR')} a ${fimDaSemana.toLocaleDateString('pt-BR')}`;
-            gerarPDF(ordens, `Relatório Semanal - ${periodo}`, 'semana');
-            showToast('✅ Relatório gerado com sucesso!');
+            if (ordens.length === 0) { showToast('Nenhuma O.S esta semana', 'error'); return; }
+            gerarPDF(ordens, `Relatório Semanal - ${inicio.toLocaleDateString('pt-BR')} a ${fim.toLocaleDateString('pt-BR')}`);
         }
 
-        function gerarPDF(ordens, titulo, tipo, ano, mes) {
-            // Agrupa ordens por número
+        function gerarPDF(ordens, titulo) {
             const ordensAgrupadas = {};
             ordens.forEach(order => {
-                if (!ordensAgrupadas[order.numeroOS]) {
-                    ordensAgrupadas[order.numeroOS] = [];
-                }
+                if (!ordensAgrupadas[order.numeroOS]) ordensAgrupadas[order.numeroOS] = [];
                 ordensAgrupadas[order.numeroOS].push(order);
             });
 
-            // Criar conteúdo HTML para impressão
-            let html = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>${titulo}</title>
-                    <style>
-                        @page { margin: 2cm; }
-                        body { font-family: Arial, sans-serif; color: #333; }
-                        .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #6366f1; padding-bottom: 15px; }
-                        .header h1 { color: #6366f1; margin: 0; font-size: 24px; }
-                        .header p { color: #666; margin: 5px 0; }
-                        .stats { display: flex; justify-content: space-around; margin: 20px 0; background: #f3f4f6; padding: 15px; border-radius: 8px; }
-                        .stat-item { text-align: center; }
-                        .stat-item .label { font-size: 12px; color: #666; }
-                        .stat-item .value { font-size: 24px; font-weight: bold; color: #6366f1; }
-                        .order-group { border: 2px solid #e5e7eb; margin: 20px 0; padding: 20px; border-radius: 12px; page-break-inside: avoid; background: #fafafa; }
-                        .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb; }
-                        .order-number { font-size: 20px; font-weight: bold; color: #1f2937; }
-                        .status { padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
-                        .status-aberta { background: #e5e7eb; color: #4b5563; }
-                        .status-andamento { background: #dbeafe; color: #1e40af; }
-                        .status-pausada { background: #fef3c7; color: #92400e; }
-                        .status-concluida { background: #d1fae5; color: #065f46; }
-                        .status-cancelada { background: #fee2e2; color: #991b1b; }
-                        .order-desc { color: #4b5563; margin: 10px 0; padding: 10px; background: white; border-radius: 6px; }
-                        .apontamentos-title { font-size: 14px; font-weight: bold; color: #6366f1; margin: 15px 0 10px 0; }
-                        .apontamento-item { background: white; border-left: 4px solid #6366f1; padding: 12px; margin: 8px 0; border-radius: 6px; }
-                        .apontamento-item .data { font-weight: bold; color: #1f2937; margin-bottom: 5px; }
-                        .apontamento-item .detalhes { font-size: 13px; color: #6b7280; }
-                        .duracao-total { background: #dbeafe; padding: 10px; border-radius: 6px; margin-top: 10px; font-weight: bold; color: #1e40af; text-align: right; }
-                        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #9ca3af; border-top: 1px solid #e5e7eb; padding-top: 15px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <h1>⚙️ ${titulo}</h1>
-                        <p>Gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
-                    </div>
-            `;
+            let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${titulo}</title>
+            <style>
+                body { font-family: Arial, sans-serif; color: #333; margin: 2cm; }
+                .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #6366f1; padding-bottom: 15px; }
+                .header h1 { color: #6366f1; margin: 0; font-size: 24px; }
+                .order-group { border: 2px solid #e5e7eb; margin: 20px 0; padding: 20px; border-radius: 12px; page-break-inside: avoid; background: #fafafa; }
+                .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #e5e7eb; }
+                .order-number { font-size: 20px; font-weight: bold; }
+                .status { padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+                .status-concluida { background: #d1fae5; color: #065f46; }
+                .apontamento { background: white; border-left: 4px solid #6366f1; padding: 12px; margin: 8px 0; border-radius: 6px; }
+            </style></head><body><div class="header"><h1>⚙️ ${titulo}</h1><p>Gerado em ${new Date().toLocaleDateString('pt-BR')}</p></div>`;
 
-            // Estatísticas - contando O.S únicas
-            const osUnicas = Object.keys(ordensAgrupadas);
-            const totalOS = osUnicas.length;
-            
-            const osConcluidas = osUnicas.filter(numOS => {
-                const entradasDaOS = ordensAgrupadas[numOS];
-                return entradasDaOS.every(o => o.status === 'Concluída');
-            });
-            const concluidas = osConcluidas.length;
-            
-            const osEmAndamento = osUnicas.filter(numOS => {
-                const entradasDaOS = ordensAgrupadas[numOS];
-                return entradasDaOS.some(o => o.status === 'Em Andamento');
-            });
-            const emAndamento = osEmAndamento.length;
-            
-            const osPendentes = osUnicas.filter(numOS => {
-                const entradasDaOS = ordensAgrupadas[numOS];
-                return entradasDaOS.some(o => o.status === 'Aberta');
-            });
-            const pendentes = osPendentes.length;
-
-            html += `
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="label">Total de O.S Únicas</div>
-                        <div class="value">${totalOS}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="label">Concluídas</div>
-                        <div class="value" style="color: #10b981;">${concluidas}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="label">Em Andamento</div>
-                        <div class="value" style="color: #3b82f6;">${emAndamento}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="label">Pendentes</div>
-                        <div class="value" style="color: #f59e0b;">${pendentes}</div>
-                    </div>
-                </div>
-            `;
-
-            // Se for relatório mensal, adicionar dias sem O.S
-            if (tipo === 'mes' && ano && mes) {
-                const diasSem = diasSemApontamento(ano, mes);
-                if (diasSem.length > 0) {
-                    html += `
-                        <div style="background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                            <h3 style="color: #92400e; margin: 0 0 10px 0; font-size: 16px;">📅 Dias sem O.S (${diasSem.length} dias)</h3>
-                            <p style="color: #78350f; margin: 0;">${diasSem.map(d => d.toString().padStart(2, '0')).join(', ')}</p>
-                        </div>
-                    `;
-                }
-            }
-
-            html += '<h2 style="color: #1f2937; margin: 30px 0 15px 0; font-size: 18px;">📋 Ordens de Serviço Agrupadas</h2>';
-
-            if (osUnicas.length === 0) {
-                html += '<p style="text-align: center; color: #9ca3af; padding: 40px;">Nenhuma ordem encontrada neste período</p>';
-            } else {
-                // Gera HTML para cada O.S agrupada
-                osUnicas.forEach(numeroOS => {
-                    const apontamentos = ordensAgrupadas[numeroOS];
-                    apontamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
-                    
-                    const ultimoApontamento = apontamentos[apontamentos.length - 1];
-                    const status = ultimoApontamento.status;
-                    const statusClass = {
-                        'Aberta': 'status-aberta',
-                        'Em Andamento': 'status-andamento',
-                        'Pausada': 'status-pausada',
-                        'Concluída': 'status-concluida',
-                        'Cancelada': 'status-cancelada'
-                    }[status] || 'status-aberta';
-
-                    // Calcula duração total
-                    let duracaoTotalMinutos = 0;
-                    apontamentos.forEach(apt => {
-                        if (apt.horaInicio && apt.horaFim) {
-                            const [h1, m1] = apt.horaInicio.split(':').map(Number);
-                            const [h2, m2] = apt.horaFim.split(':').map(Number);
-                            let duracao = (h2 * 60 + m2) - (h1 * 60 + m1);
-                            if (apt.descontarAlmoco === 'sim') {
-                                duracao -= 85;
-                            }
-                            if (duracao > 0) {
-                                duracaoTotalMinutos += duracao;
-                            }
-                        }
-                    });
-
-                    const horasTotal = Math.floor(duracaoTotalMinutos / 60);
-                    const minutosTotal = duracaoTotalMinutos % 60;
-                    const duracaoTotal = duracaoTotalMinutos > 0 ? `${horasTotal}h ${minutosTotal}min` : 'Não informado';
-
-                    html += `
-                        <div class="order-group">
-                            <div class="order-header">
-                                <span class="order-number">O.S ${numeroOS}</span>
-                                <span class="status ${statusClass}">${status}</span>
-                            </div>
-                            <div class="order-desc"><strong>Descrição:</strong> ${ultimoApontamento.descricao}</div>
-                            
-                            <div class="apontamentos-title">📊 Apontamentos (${apontamentos.length}):</div>
-                    `;
-
-                    apontamentos.forEach(apt => {
-                        const dataFormatada = new Date(apt.data + 'T00:00:00').toLocaleDateString('pt-BR');
-                        const duracao = apt.horaInicio && apt.horaFim ? 
-                            calculateDuration(apt.horaInicio, apt.horaFim, apt.descontarAlmoco || 'nao') : 'Não informado';
-
-                        html += `
-                            <div class="apontamento-item">
-                                <div class="data">📅 ${dataFormatada}</div>
-                                <div class="detalhes">
-                                    ${apt.horaInicio ? '🕐 ' + apt.horaInicio + ' - ' + (apt.horaFim || '...') : 'Horários não informados'}<br>
-                                    ${apt.horaInicio && apt.horaFim ? '⏱ Duração: ' + duracao : ''}
-                                    ${apt.descontarAlmoco === 'sim' ? ' <span style="color: #f59e0b;">(🍽️ Almoço descontado: -1h25min)</span>' : ''}
-                                </div>
-                            </div>
-                        `;
-                    });
-
-                    html += `
-                            <div class="duracao-total">
-                                ⏱ Duração Total Acumulada: ${duracaoTotal}
-                            </div>
-                        </div>
-                    `;
+            Object.keys(ordensAgrupadas).forEach(numeroOS => {
+                const apontamentos = ordensAgrupadas[numeroOS];
+                apontamentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+                const ultimo = apontamentos[apontamentos.length - 1];
+                
+                html += `<div class="order-group"><div class="order-header"><span class="order-number">O.S ${numeroOS}</span><span class="status status-${ultimo.status.toLowerCase().replace(' ', '-')}">${ultimo.status}</span></div><p><strong>Descrição:</strong> ${ultimo.descricao}</p><p><strong>Apontamentos (${apontamentos.length}):</strong></p>`;
+                
+                apontamentos.forEach(apt => {
+                    const data = new Date(apt.data + 'T00:00:00').toLocaleDateString('pt-BR');
+                    const duracao = apt.horaInicio && apt.horaFim ? calculateDuration(apt.horaInicio, apt.horaFim, apt.descontarAlmoco || 'nao') : '-';
+                    html += `<div class="apontamento">📅 ${data} ${apt.horaInicio ? '| 🕐 ' + apt.horaInicio + ' - ' + apt.horaFim : ''} ${apt.horaInicio && apt.horaFim ? '| ⏱ ' + duracao : ''}${apt.descontarAlmoco === 'sim' ? ' (🍽️ Almoço descontado)' : ''}</div>`;
                 });
-            }
+                
+                html += `</div>`;
+            });
 
-            html += `
-                    <div class="footer">
-                        <p>Relatório gerado pelo Sistema de Gestão de O.S</p>
-                        <p>${totalOS} O.S única(s) com ${ordens.length} apontamento(s) neste período</p>
-                    </div>
-                </body>
-                </html>
-            `;
-
-            // Abrir em nova janela e imprimir
-            const janelaImpressao = window.open('', '_blank');
-            janelaImpressao.document.write(html);
-            janelaImpressao.document.close();
+            html += `</body></html>`;
             
-            // Aguardar carregamento e imprimir
-            setTimeout(() => {
-                janelaImpressao.print();
-            }, 500);
+            const janela = window.open('', '_blank');
+            janela.document.write(html);
+            janela.document.close();
+            setTimeout(() => janela.print(), 500);
+            showToast('Relatório gerado!');
         }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 's') { e.preventDefault(); saveOrder(); }
+            if (e.key === 'Escape' && editingId) cancelEdit();
+        });
+
+        loadOrders();
+        document.getElementById('data').valueAsDate = new Date();
     </script>
 </body>
 </html>
